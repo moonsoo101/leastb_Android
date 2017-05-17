@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "511983003268",
+    "firebase_url": "https://leastb-a3547.firebaseio.com",
+    "project_id": "leastb-a3547",
+    "storage_bucket": "leastb-a3547.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:511983003268:android:0eb597899daaa22f",
+        "android_client_info": {
+          "package_name": "com.example.wisebody.push"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "511983003268-5ent4t1tl7oq90tjiueh06co0d0eg0ga.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDT8drQzSSA_xyBewA3llVSzZud4WRpbU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:511983003268:android:d4e3c2e6cfd1e053",
+        "android_client_info": {
+          "package_name": "com.leastb.moonsoo.walkingeye"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "511983003268-5ent4t1tl7oq90tjiueh06co0d0eg0ga.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDT8drQzSSA_xyBewA3llVSzZud4WRpbU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

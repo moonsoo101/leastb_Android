@@ -38,7 +38,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         try {
             String data = URLEncoder.encode("Token", "UTF-8") + "=" + URLEncoder.encode(token, "UTF-8");
 
-            URL url = new URL("http://ec2-52-79-180-138.ap-northeast-2.compute.amazonaws.com/leastb/register.php");
+            URL url = new URL("http://ec2-13-124-108-18.ap-northeast-2.compute.amazonaws.com/leastb/register.php");
             URLConnection conn = url.openConnection();
 
             conn.setDoOutput(true);

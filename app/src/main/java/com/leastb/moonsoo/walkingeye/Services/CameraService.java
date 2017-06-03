@@ -1,4 +1,4 @@
-package com.leastb.moonsoo.walkingeye;
+package com.leastb.moonsoo.walkingeye.Services;
 
 import android.app.Service;
 import android.content.Intent;
@@ -17,7 +17,6 @@ import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.util.Random;
 
 /**
  * Created by wisebody on 2017. 5. 29..
@@ -63,14 +62,9 @@ public class CameraService extends Service {
     }
 
 
-//서비스에서 액티비티 함수 호출은..
-
-
-
     @Override
     public void onCreate() {
         super.onCreate();
-        // 서비스에서 가장 먼저 호출됨(최초에 한번만)
         Log.d("test", "서비스의 onCreate");
         index = 0;
 
@@ -104,7 +98,7 @@ public class CameraService extends Service {
     public void onDestroy() {
         super.onDestroy();
         // 서비스가 종료될 때 실행
-        loop = false; // 음악 종료
+        loop = false;
         index = 0;
         thread= null;
         Log.d("test", "서비스의 onDestroy");

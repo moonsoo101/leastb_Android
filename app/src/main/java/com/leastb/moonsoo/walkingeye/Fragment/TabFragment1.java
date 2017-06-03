@@ -1,23 +1,19 @@
 package com.leastb.moonsoo.walkingeye.Fragment;
 
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.leastb.moonsoo.walkingeye.CameraService;
+import com.leastb.moonsoo.walkingeye.Services.CameraService;
 import com.leastb.moonsoo.walkingeye.R;
-import com.leastb.moonsoo.walkingeye.VoiceService;
+import com.leastb.moonsoo.walkingeye.Services.VoiceService;
 import com.squareup.picasso.Picasso;
 
 /**

@@ -1,4 +1,4 @@
-package com.leastb.moonsoo.walkingeye;
+package com.leastb.moonsoo.walkingeye.Services;
 
 /**
  * Created by wisebody on 2017. 5. 15..
@@ -15,6 +15,8 @@ import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
 import com.google.firebase.messaging.RemoteMessage;
+import com.leastb.moonsoo.walkingeye.MainActivity;
+import com.leastb.moonsoo.walkingeye.R;
 
 import java.net.URL;
 

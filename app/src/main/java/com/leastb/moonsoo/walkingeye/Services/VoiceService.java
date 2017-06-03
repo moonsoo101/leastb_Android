@@ -1,13 +1,10 @@
-package com.leastb.moonsoo.walkingeye;
+package com.leastb.moonsoo.walkingeye.Services;
 
 import android.app.Service;
 import android.content.Intent;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
 
 import net.daum.mf.speech.api.TextToSpeechClient;
 import net.daum.mf.speech.api.TextToSpeechListener;

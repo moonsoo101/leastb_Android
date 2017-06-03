@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -14,28 +15,49 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
-        <activity android:name=".MainActivity" >
+        <activity android:name=".MainActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".LockScreenActivity"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
         <service
-            android:name=".MyFirebaseMessagingService">
+            android:name=".Services.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
-        <service android:name=".CameraService"
+        <service android:name=".Services.CameraService"
             />
-        <service android:name=".VoiceService"/>
+        <service android:name=".Services.VoiceService"/>
+        <service android:name=".Services.ScreenService"/>
         <service
-            android:name=".MyFirebaseInstanceIDService">
+            android:name=".Services.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
+        <receiver
+            android:name=".BroadCaster.StartReceiver"
+            android:enabled="true"
+            android:exported="false"
+            android:label="STARTReceiver">
+            <intent-filter >
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".BroadCaster.RestartReceiver"
+            android:process=".remote" >
+            <intent-filter>
+                <action android:name="RestartReceiver.restart" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

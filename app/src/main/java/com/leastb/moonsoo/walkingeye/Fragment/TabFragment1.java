@@ -17,6 +17,7 @@ import android.widget.ImageView;
 
 import com.leastb.moonsoo.walkingeye.CameraService;
 import com.leastb.moonsoo.walkingeye.R;
+import com.leastb.moonsoo.walkingeye.VoiceService;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -49,10 +50,14 @@ public class TabFragment1 extends Fragment {
         startBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                Intent intent = new Intent(
+//                        getActivity(),//현재제어권자
+//                        CameraService.class); // 이동할 컴포넌트
+//                conn = true;
+//                getActivity().startService(intent); // 서비스 시작\
                 Intent intent = new Intent(
                         getActivity(),//현재제어권자
-                        CameraService.class); // 이동할 컴포넌트
-                conn = true;
+                        VoiceService.class); // 이동할 컴포넌트
                 getActivity().startService(intent); // 서비스 시작
 
             }

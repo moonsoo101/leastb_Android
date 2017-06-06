@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +15,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
+import com.leastb.moonsoo.walkingeye.Adapter.BlackBoxRecyclerAdapter;
 import com.leastb.moonsoo.walkingeye.ApplicationClass;
+import com.leastb.moonsoo.walkingeye.DTO.BlackBoxDTO;
 import com.leastb.moonsoo.walkingeye.EventDecorator;
 import com.leastb.moonsoo.walkingeye.R;
 import com.leastb.moonsoo.walkingeye.Util.DB;
@@ -43,8 +47,11 @@ public class TabFragment2 extends Fragment implements OnDateSelectedListener, On
     private static final DateFormat FORMATTER = SimpleDateFormat.getDateInstance();
     @BindView(R.id.calendarView)
     MaterialCalendarView widget;
-    @BindView(R.id.textView)
-    TextView textView;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+    LinearLayoutManager linearLayoutManager;
+    BlackBoxRecyclerAdapter blackBoxRecyclerAdapter;
+    ArrayList<BlackBoxDTO> blackBoxDTOs = new ArrayList<>();
     ArrayList<CalendarDay> accidentDay = new ArrayList<>();
     ArrayList<CalendarDay> normalDay = new ArrayList<>();
     @Override
@@ -54,14 +61,19 @@ public class TabFragment2 extends Fragment implements OnDateSelectedListener, On
         widget.setOnDateChangedListener(this);
         widget.setOnMonthChangedListener(this);
         widget.setSelectedDate(Calendar.getInstance());
+        linearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
+        blackBoxRecyclerAdapter = new BlackBoxRecyclerAdapter(blackBoxDTOs,R.layout.blackbox_item);
+        recyclerView.setAdapter(blackBoxRecyclerAdapter);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setNestedScrollingEnabled(false);
         searchAccidentDay(ApplicationClass.ID);
-        textView.setText(getSelectedDatesString());
         return view;
     }
 
     @Override
     public void onDateSelected(@NonNull MaterialCalendarView widget, @Nullable CalendarDay date, boolean selected) {
-        textView.setText(getSelectedDatesString());
+
+        getBlackBox(ApplicationClass.ID, Integer.toString(date.getYear()), Integer.toString(date.getMonth()+1), Integer.toString(date.getDay()));
     }
 
     @Override
@@ -123,6 +135,54 @@ public class TabFragment2 extends Fragment implements OnDateSelectedListener, On
         }
         searchData task = new searchData();
         task.execute(id);
+    }
+    private void getBlackBox(String id, String year, String month, String day){
+
+        class searchData extends AsyncTask<String, Void, String> {
+            String id;
+            String year, month, day;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                try {
+                    JSONObject jsonObj = new JSONObject(s);
+                    JSONArray jsonArray = jsonObj.getJSONArray("result");
+                    if(blackBoxDTOs.size()>0)
+                        blackBoxDTOs.clear();
+                    if(jsonArray.length()>0) {
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject c = jsonArray.getJSONObject(i);
+                            blackBoxDTOs.add(new BlackBoxDTO(c.getString("imgName"), c.getInt("isAccident"),""));
+                        }
+                    }
+                    blackBoxRecyclerAdapter.notifyDataSetChanged();
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            protected String doInBackground(String... params) {
+                id = (String) params[0];
+                year = (String) params[1];
+                month = (String) params[2];
+                day = (String) params[3];
+                String[] posts = {id, year, month, day};
+                DB db = new DB("getBlackBox.php");
+                String result = db.post(posts);
+                Log.d("result",result);
+                return result;
+            }
+        }
+        searchData task = new searchData();
+        task.execute(id, year, month, day);
     }
 
 }

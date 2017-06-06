@@ -1,5 +1,7 @@
 package com.leastb.moonsoo.walkingeye;
 
+import android.*;
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,14 +12,22 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.WindowManager;
+import android.widget.Toast;
 
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 import com.leastb.moonsoo.walkingeye.Services.CameraService;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.leastb.moonsoo.walkingeye.Adapter.TabPagerAdapter;
 import com.leastb.moonsoo.walkingeye.Services.ScreenService;
+import com.leastb.moonsoo.walkingeye.Services.VoiceListenService;
+import com.leastb.moonsoo.walkingeye.Services.VoiceService;
 import com.leastb.moonsoo.walkingeye.Util.DB;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -75,6 +85,24 @@ private BroadcastReceiver receiver = new BroadcastReceiver() {
 
             }
         });
+        PermissionListener permissionlistener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                Toast.makeText(MainActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                Toast.makeText(MainActivity.this, "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+            }
+
+
+        };
+        new TedPermission(this)
+                .setPermissionListener(permissionlistener)
+                .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
+                .setPermissions(android.Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .check();
         updateToDatabase(ApplicationClass.ID,FirebaseInstanceId.getInstance().getToken());
 
 //        textResult = (TextView)findViewById(R.id.result);
@@ -105,6 +133,20 @@ private BroadcastReceiver receiver = new BroadcastReceiver() {
         super.onPause();
         unregisterReceiver(receiver);
     }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)){
+            Log.d("volume","down");
+            Intent intent = new Intent(
+                    getApplicationContext(),//현재제어권자
+                    VoiceService.class); // 이동할 컴포넌트
+            intent.putExtra("text","실행하실 동작을 말씀해 주세요.");
+            getApplicationContext().startService(intent);
+
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     protected void setStatusBarTranslucent(boolean makeTranslucent) {
         if (makeTranslucent) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);

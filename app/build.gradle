@@ -32,6 +32,7 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.prolificinteractive:material-calendarview:1.4.3'
     compile 'com.jakewharton:butterknife:8.6.0'
+    compile 'gun0912.ted:tedpermission:1.0.3'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
     testCompile 'junit:junit:4.12'
     compile project(':daum-speech-openapi-5.0')

@@ -24,7 +24,6 @@ public class TabFragment1 extends Fragment {
     View view;
     ImageView imageView;
     Button startBtn, stopBtn;
-    boolean conn;
 
     private BroadcastReceiver receiver = new BroadcastReceiver() {
 
@@ -49,25 +48,16 @@ public class TabFragment1 extends Fragment {
                 Intent intent = new Intent(
                         getActivity(),//현재제어권자
                         CameraService.class); // 이동할 컴포넌트
-                conn = true;
                 getActivity().startService(intent); // 서비스 시작\
-                Intent intent1 = new Intent(
-                        getActivity(),//현재제어권자
-                        VoiceService.class); // 이동할 컴포넌트
-                getActivity().startService(intent1); // 서비스 시작
-
             }
         });
         stopBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(conn) {
                     Intent intent = new Intent(
                             getActivity(),//현재제어권자
                             CameraService.class); // 이동할 컴포넌트
                     getActivity().stopService(intent); // 서비스 종료
-                    conn = false;
-                }
             }
         });
         return view;

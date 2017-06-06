@@ -12,6 +12,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.leastb.moonsoo.walkingeye.ApplicationClass;
+import com.leastb.moonsoo.walkingeye.Util.DB;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -32,7 +33,6 @@ public class CameraService extends Service {
 //    static String PI_IP = "192.168.43.244";
 static String PI_IP = "192.168.43.244";
     int index;
-    Thread thread;
     public static final String NOTIFICATION = "com.leastb.moonsoo.walkingeye.Fragment";
     public static final String INDEX = "index";
     //서비스 바인더 내부 클래스 선언
@@ -50,24 +50,6 @@ static String PI_IP = "192.168.43.244";
         return mBinder;
     }
 
-    //콜백 인터페이스 선언
-    public interface ICallback {
-        public void recvData(); //액티비티에서 선언한 콜백 함수.
-    }
-
-    private ICallback mCallback;
-
-    //액티비티에서 콜백 함수를 등록하기 위함.
-    public void registerCallback(ICallback cb) {
-        mCallback = cb;
-    }
-
-    //액티비티에서 서비스 함수를 호출하기 위한 함수 생성
-    public void myServiceFunc(){
-        //서비스에서 처리할 내용
-    }
-
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -82,20 +64,27 @@ static String PI_IP = "192.168.43.244";
         Log.d("test", "서비스의 onStartCommand");
                     if(!loop) {
                         loop = true;
+                        Intent intent1 = new Intent(
+                                getApplicationContext(),//현재제어권자
+                                VoiceService.class); // 이동할 컴포넌트
+                        intent1.putExtra("text","실시간 감시를 시작합니다");
+                        getApplicationContext().startService(intent1); // 서비스 시작
                         Toast.makeText(CameraService.this.getApplicationContext(),"실시간 감시를 시작합니다.",Toast.LENGTH_SHORT).show();
-                        cameraStart(Long.toString(System.currentTimeMillis()), ApplicationClass.ID, Integer.toString(cal.get(Calendar.YEAR)), Integer.toString(cal.get(Calendar.MONTH)+1), Integer.toString(cal.get(Calendar.DATE)));
+                        String id = ApplicationClass.ID;
+                        int year = cal.get(Calendar.YEAR);
+                        int month = cal.get(Calendar.MONTH)+1;
+                        int day = cal.get(Calendar.DATE);
+                        registWatchDay(id, Integer.toString(year), Integer.toString(month), Integer.toString(day));
+                        cameraStart(Long.toString(System.currentTimeMillis()), id, Integer.toString(year), Integer.toString(month), Integer.toString(day));
                     }
                     else
                     {
-                        Handler handler = new Handler(Looper.getMainLooper());
-
-                        handler.post(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                Toast.makeText(CameraService.this.getApplicationContext(),"이미 실시간 감시가 진행중입니다.",Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        Intent intent1 = new Intent(
+                                getApplicationContext(),//현재제어권자
+                                VoiceService.class); // 이동할 컴포넌트
+                        intent1.putExtra("text","이미 실시간 감시가 진행중입니다.");
+                        getApplicationContext().startService(intent1); // 서비스 시작
+                        Toast.makeText(CameraService.this.getApplicationContext(),"이미 실시간 감시가 진행중입니다.",Toast.LENGTH_SHORT).show();
                     }
 
         return super.onStartCommand(intent, flags, startId);
@@ -104,12 +93,26 @@ static String PI_IP = "192.168.43.244";
     @Override
     public void onDestroy() {
         super.onDestroy();
-        // 서비스가 종료될 때 실행
-        loop = false;
-        index = 0;
-        thread= null;
-        Log.d("test", "서비스의 onDestroy");
+        if(loop) {
+            Intent intent = new Intent(
+                    getApplicationContext(),//현재제어권자
+                    VoiceService.class); // 이동할 컴포넌트
+            intent.putExtra("text","실시간 감시를 종료합니다.");
+            getApplicationContext().startService(intent); // 서비스 시작
+            Toast.makeText(CameraService.this.getApplicationContext(), "실시간 감시를 종료합니다.", Toast.LENGTH_SHORT).show();
+            loop = false;
+            index = 0;
+        }
+        else {
+            Intent intent = new Intent(
+                    getApplicationContext(),//현재제어권자
+                    VoiceService.class); // 이동할 컴포넌트
+            intent.putExtra("text","실시간 감시가 실행 중이지 않습니다.");
+            getApplicationContext().startService(intent); // 서비스 시작
+            Toast.makeText(CameraService.this.getApplicationContext(), "실시간 감시가 실행 중이지 않습니다.", Toast.LENGTH_SHORT).show();
+        }
     }
+
     private void publishResults(String index) {
         Intent intent = new Intent(NOTIFICATION);
         intent.putExtra("index", index);
@@ -148,6 +151,37 @@ static String PI_IP = "192.168.43.244";
         catch(Exception e){
             return new String("Exception: " + e.getMessage());
         }
+    }
+    private void registWatchDay(String id, String year, String month, String day){
+
+        class RegistTask extends AsyncTask<String, Void, String> {
+            String id;
+            String year, month, day;
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+            }
+
+            @Override
+            protected String doInBackground(String... params) {
+                id = (String)params[0];
+                year = (String)params[1];
+                month = (String)params[2];
+                day = (String)params[3];
+                String[] posts = {id, year, month, day};
+                DB db = new DB("registWatchDay.php");
+                String result = db.post(posts);
+                Log.d("CameraService", result);
+                return result;
+            }
+        }
+        RegistTask task = new RegistTask();
+        task.execute(id, year, month, day);
     }
     private void cameraStart(String index, String id, String year, String month, String day){
 

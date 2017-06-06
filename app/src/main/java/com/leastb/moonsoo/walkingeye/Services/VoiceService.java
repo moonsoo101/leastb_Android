@@ -17,6 +17,7 @@ import net.daum.mf.speech.api.TextToSpeechManager;
 public class VoiceService extends Service implements TextToSpeechListener {
     private TextToSpeechClient ttsClient;
     static String APIKEY ="3442a54f5e352782458d10f8dab3077d";
+    String strText;
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -25,7 +26,8 @@ public class VoiceService extends Service implements TextToSpeechListener {
     @Override
     public void onCreate() {
         super.onCreate();
-        TextToSpeechManager.getInstance().initializeLibrary(getApplicationContext());
+        TextToSpeechManager.getInstance().initializeLibrary(this);
+
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -38,7 +40,7 @@ public class VoiceService extends Service implements TextToSpeechListener {
                 .setSpeechVoice(TextToSpeechClient.VOICE_WOMAN_READ_CALM)  //TTS 음색 모드 설정(여성 차분한 낭독체)
                 .setListener(this)
                 .build();
-        String strText = "안녕하세요";
+        strText = intent.getStringExtra("text");
         ttsClient.play(strText);
 
 //// 또는
@@ -60,7 +62,12 @@ public class VoiceService extends Service implements TextToSpeechListener {
         int intRecvSize = ttsClient.getReceivedDataSize();  //세션 중에 전송받은 데이터 사이즈
 
         final String strInacctiveText = "handleFinished() SentSize : " + intSentSize + "     RecvSize : " + intRecvSize;
-
+        if(strText.equals("실행하실 동작을 말씀해 주세요.")) {
+            Intent intent = new Intent(
+                    getApplicationContext(),//현재제어권자
+                    VoiceListenService.class);
+            getApplicationContext().startService(intent);
+        }
         Log.i("VoiceService", strInacctiveText);
     }
 

@@ -1,42 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-    <TextView
+    tools:context=".MainActivity">
+    <!--tools:context=".TabFragm"-->
+
+
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        android:id="@+id/calendarView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="2page"
-        android:textSize="30sp"/>
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/btnCont"
-        android:id="@+id/img"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:id="@+id/btnCont"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
-        android:weightSum="2">
-    <Button
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:background="#00bcd4"
-        android:textColor="#ffffff"
-        android:textSize="20sp"
-        android:text="실시간 감시"
-        style="?android:attr/borderlessButtonStyle"/>
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#00bcd4"
-            android:textColor="#ffffff"
-            android:textSize="20sp"
-            android:text="실시간 감시 중지"
-            style="?android:attr/borderlessButtonStyle"/>
-    </LinearLayout>
-</RelativeLayout>
+        app:mcv_selectionColor="#80deea"
+        />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_margin="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        />
+
+</LinearLayout>

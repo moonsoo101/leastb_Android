@@ -11,12 +11,15 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.leastb.moonsoo.walkingeye.ApplicationClass;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.Calendar;
 
 /**
  * Created by wisebody on 2017. 5. 29..
@@ -25,6 +28,9 @@ import java.net.URLEncoder;
 public class CameraService extends Service {
     @Nullable
     public boolean loop;
+    Calendar cal;
+//    static String PI_IP = "192.168.43.244";
+static String PI_IP = "192.168.43.244";
     int index;
     Thread thread;
     public static final String NOTIFICATION = "com.leastb.moonsoo.walkingeye.Fragment";
@@ -65,6 +71,7 @@ public class CameraService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        cal = Calendar.getInstance();
         Log.d("test", "서비스의 onCreate");
         index = 0;
 
@@ -76,7 +83,7 @@ public class CameraService extends Service {
                     if(!loop) {
                         loop = true;
                         Toast.makeText(CameraService.this.getApplicationContext(),"실시간 감시를 시작합니다.",Toast.LENGTH_SHORT).show();
-                        cameraStart(Integer.toString(index));
+                        cameraStart(Long.toString(System.currentTimeMillis()), ApplicationClass.ID, Integer.toString(cal.get(Calendar.YEAR)), Integer.toString(cal.get(Calendar.MONTH)+1), Integer.toString(cal.get(Calendar.DATE)));
                     }
                     else
                     {
@@ -103,19 +110,22 @@ public class CameraService extends Service {
         thread= null;
         Log.d("test", "서비스의 onDestroy");
     }
-    private void publishResults(int index) {
+    private void publishResults(String index) {
         Intent intent = new Intent(NOTIFICATION);
         intent.putExtra("index", index);
         sendBroadcast(intent);
     }
 
 
-    protected String insert(String index)
+    protected String cameraCall(String index, String id, String year, String month, String day)
     {
         try {
             String data = URLEncoder.encode("index", "UTF-8") + "=" + URLEncoder.encode(index, "UTF-8");
-
-            URL url = new URL("http://192.168.43.244/leastb/camera.php");
+            data += "&" + URLEncoder.encode("id", "UTF-8") + "=" + URLEncoder.encode(id, "UTF-8");
+            data += "&" + URLEncoder.encode("year", "UTF-8") + "=" + URLEncoder.encode(year, "UTF-8");
+            data += "&" + URLEncoder.encode("month", "UTF-8") + "=" + URLEncoder.encode(month, "UTF-8");
+            data += "&" + URLEncoder.encode("day", "UTF-8") + "=" + URLEncoder.encode(day, "UTF-8");
+            URL url = new URL("http://"+PI_IP+"/leastb/camera.php");
             URLConnection conn = url.openConnection();
 
             conn.setDoOutput(true);
@@ -139,10 +149,12 @@ public class CameraService extends Service {
             return new String("Exception: " + e.getMessage());
         }
     }
-    private void cameraStart(final String index){
+    private void cameraStart(String index, String id, String year, String month, String day){
 
-        class InsertData extends AsyncTask<String, Void, String> {
-
+        class CameraTask extends AsyncTask<String, Void, String> {
+            String index;
+            String id;
+            String year, month, day;
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
@@ -152,8 +164,8 @@ public class CameraService extends Service {
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
                 if(loop) {
-                    publishResults(Integer.parseInt(index));
-                    cameraStart(Integer.toString(Integer.parseInt(index) + 1));
+                    publishResults(id+year+month+day+"-"+index);
+                    cameraStart(Long.toString(System.currentTimeMillis()), ApplicationClass.ID, Integer.toString(cal.get(Calendar.YEAR)), Integer.toString(cal.get(Calendar.MONTH)+1), Integer.toString(cal.get(Calendar.DATE)));
                 }
 
             }
@@ -161,15 +173,17 @@ public class CameraService extends Service {
             @Override
             protected String doInBackground(String... params) {
 
-                String index = (String)params[0];
-                String result = insert(index);
+                index = (String)params[0];
+                id = (String)params[1];
+                year = (String)params[2];
+                month = (String)params[3];
+                day = (String)params[4];
+                String result = cameraCall(index, id, year, month, day);
                 Log.d("CameraService", result);
                 return result;
             }
         }
-
-
-        InsertData task = new InsertData();
-        task.execute(index);
+        CameraTask task = new CameraTask();
+        task.execute(index, id, year, month, day);
     }
 }

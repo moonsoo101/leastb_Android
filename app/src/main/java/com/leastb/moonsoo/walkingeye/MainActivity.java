@@ -4,15 +4,20 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.WindowManager;
+
 import com.leastb.moonsoo.walkingeye.Services.CameraService;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.leastb.moonsoo.walkingeye.Adapter.TabPagerAdapter;
 import com.leastb.moonsoo.walkingeye.Services.ScreenService;
+import com.leastb.moonsoo.walkingeye.Util.DB;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,8 +33,9 @@ private BroadcastReceiver receiver = new BroadcastReceiver() {
     public void onReceive(Context context, Intent intent) {
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
-            int index = bundle.getInt(CameraService.INDEX);
-            mPagerAdapter.tabFragment1.loagPicture(index);
+            String index = bundle.getString(CameraService.INDEX);
+            mPagerAdapter.tabFragment1.loadPicture(index);
+            Log.d("index",index);
         }
     }
 };
@@ -38,6 +44,7 @@ private BroadcastReceiver receiver = new BroadcastReceiver() {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setStatusBarTranslucent(true);
         FirebaseMessaging.getInstance().subscribeToTopic("news");
         FirebaseInstanceId.getInstance().getToken();
         Intent intent = new Intent(this, ScreenService.class);
@@ -45,8 +52,8 @@ private BroadcastReceiver receiver = new BroadcastReceiver() {
 //        btnRead = (Button)findViewById(R.id.readclient);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
-        tabLayout.addTab(tabLayout.newTab().setText("Tab One"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab Two"));
+        tabLayout.addTab(tabLayout.newTab().setText("전방감시"));
+        tabLayout.addTab(tabLayout.newTab().setText("블랙박스"));
         tabLayout.addTab(tabLayout.newTab().setText("Tab Three"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         mPagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
@@ -68,6 +75,7 @@ private BroadcastReceiver receiver = new BroadcastReceiver() {
 
             }
         });
+        updateToDatabase(ApplicationClass.ID,FirebaseInstanceId.getInstance().getToken());
 
 //        textResult = (TextView)findViewById(R.id.result);
 //
@@ -96,6 +104,48 @@ private BroadcastReceiver receiver = new BroadcastReceiver() {
     protected void onPause() {
         super.onPause();
         unregisterReceiver(receiver);
+    }
+    protected void setStatusBarTranslucent(boolean makeTranslucent) {
+        if (makeTranslucent) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        } else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
+    }
+    private void updateToDatabase(String id, String token){
+
+        class searchData extends AsyncTask<String, Void, String> {
+            String id;
+            String token;
+            /*WeakReference<Activity> mActivityReference;
+            public searchData(Activity activity){
+                this.mActivityReference = new WeakReference<Activity>(activity);
+            }*/
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+            }
+            @Override
+            protected String doInBackground(String... params) {
+                Log.d("result","back");
+                id = (String) params[0];
+                token = (String) params[1];
+                String[] posts = {id, token};
+                DB db = new DB("register.php");
+                String result = db.post(posts);
+                Log.d("result",result);
+                return result;
+            }
+        }
+        searchData task = new searchData();
+        task.execute(id, token);
     }
 //    private void readAddresses() {
 //        listNote.clear();

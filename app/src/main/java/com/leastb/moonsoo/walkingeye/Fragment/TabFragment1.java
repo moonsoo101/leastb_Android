@@ -46,15 +46,15 @@ public class TabFragment1 extends Fragment {
         startBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(
-//                        getActivity(),//현재제어권자
-//                        CameraService.class); // 이동할 컴포넌트
-//                conn = true;
-//                getActivity().startService(intent); // 서비스 시작\
                 Intent intent = new Intent(
                         getActivity(),//현재제어권자
+                        CameraService.class); // 이동할 컴포넌트
+                conn = true;
+                getActivity().startService(intent); // 서비스 시작\
+                Intent intent1 = new Intent(
+                        getActivity(),//현재제어권자
                         VoiceService.class); // 이동할 컴포넌트
-                getActivity().startService(intent); // 서비스 시작
+                getActivity().startService(intent1); // 서비스 시작
 
             }
         });
@@ -72,9 +72,9 @@ public class TabFragment1 extends Fragment {
         });
         return view;
     }
-    public void loagPicture(int index)
+    public void loadPicture(String index)
     {
-        String url = "http://13.124.33.214/darknet/image"+index+".jpg";
+        String url = "http://13.124.33.214/darknet/"+index+".jpg";
         Picasso.with(getActivity()).load(url).into(imageView);
     }
 }

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android = "http://schemas.android.com/apk/res/android"
+    android:layout_width = "match_parent"
+    android:layout_height = "match_parent"
+    android:id="@+id/mainLayout"
+    android:background="#ffffff">
+    <EditText
+        android:id = "@+id/id_Edit"
+        android:layout_width = "279dp"
+        android:layout_height = "wrap_content"
+        android:layout_marginTop="150dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/login_edittext"
+        android:singleLine="true"
+        android:hint = "ID를 입력해 주세요."
+        android:textColorHint="#80deea"
+        android:inputType="text"
+        android:textColor="#16afca"
+        android:selectAllOnFocus="true" />
+    <EditText
+        android:id = "@+id/pass_Edit"
+        android:layout_width = "279dp"
+        android:layout_height = "wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/id_Edit"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/login_edittext"
+        android:singleLine="true"
+        android:imeOptions="actionDone"
+        android:inputType="textPassword"
+        android:selectAllOnFocus="true"
+        android:textColor="#16afca"
+        android:textColorHint="#80deea"
+        android:hint = "Password를 입력해주세요"/>
+
+    <Button
+        android:id="@+id/login_Btn"
+        android:layout_below="@+id/pass_Edit"
+        android:layout_width = "279.3dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dip"
+        android:layout_height = "50dp"
+        android:textColor="#FFFFFF"
+        android:background="#16afca"
+        android:text = "Log in"/>
+    <TextView
+        android:id="@+id/forgot_pwd"
+        android:layout_width="wrap_content"
+        android:layout_height="17dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/login_Btn"
+        android:layout_centerHorizontal="true"
+        android:textSize="13.5sp"
+        android:textAlignment="center"
+        android:text="비밀번호를 잊으셨습니까?"
+        android:textColor="#16afca"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/join_Btn"
+        android:textSize="16sp"
+        android:layout_gravity="center"
+        android:text="회원가입"
+        android:textAlignment="center"
+        android:textColor="#ffffff"
+        android:background="#16afca"
+        android:layout_alignParentBottom="true"
+        style="?android:attr/borderlessButtonStyle"/>
+</RelativeLayout>

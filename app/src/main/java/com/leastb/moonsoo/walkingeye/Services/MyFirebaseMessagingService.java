@@ -1,8 +1,6 @@
 package com.leastb.moonsoo.walkingeye.Services;
 
-/**
- * Created by wisebody on 2017. 5. 15..
- */
+
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -13,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.google.firebase.messaging.RemoteMessage;
 import com.leastb.moonsoo.walkingeye.MainActivity;
@@ -29,9 +28,7 @@ public class MyFirebaseMessagingService extends com.google.firebase.messaging.Fi
     @Override    public void onMessageReceived(RemoteMessage remoteMessage) {
 
         //추가한것
-        sendNotification(remoteMessage.getData().get("message"), remoteMessage.getData().get("imgurl")
-
-        );
+        sendNotification(remoteMessage.getData().get("message"), remoteMessage.getData().get("imgurl"));
     }
 
     private void sendNotification(String messageBody, String imgurl) {
@@ -46,26 +43,33 @@ public class MyFirebaseMessagingService extends com.google.firebase.messaging.Fi
             e.printStackTrace();
         }
 
-
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle("WalkingEyE")
                 .setContentText(messageBody)
-                .setAutoCancel(true)
+                .setAutoCancel(false)
                 .setSound(defaultSoundUri)
                 .setStyle(new NotificationCompat.BigPictureStyle()
                         .bigPicture(bigPicture)
-                        .setBigContentTitle("WalkingEyE 위험 예시")
+                        .setBigContentTitle("WalkingEyE 위험예보")
                         .setSummaryText(messageBody))
                 .setContentIntent(pendingIntent);
-
+        String text = null;
+        if(messageBody.contains("차량"))
+            text="차량이";
+        else if(messageBody.contains("오토바이"))
+            text = "오토바이가";
+        else if(messageBody.contains("자전거"))
+            text = "자전거가";
+        else if(messageBody.contains("행단보도"))
+            text = "행단보도가";
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         Intent intent1 = new Intent(
                 getApplicationContext(),//현재제어권자
                 VoiceService.class); // 이동할 컴포넌트
-        intent1.putExtra("text","전방에 차량이 감지되었습니다. 조심하세요.");
+        intent1.putExtra("text",text+" 감지되었습니다. 조심하세요.");
         getApplicationContext().startService(intent1); // 서비스 시작
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }

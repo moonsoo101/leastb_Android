@@ -94,6 +94,29 @@ public class DB {
             return new String("Exception: " + e.getMessage());
         }
     }
+    public String getLocation(String postURL)
+    {
+        Log.d("result","post");
+        try {
+            URL url = new URL(postURL);
+            URLConnection conn = url.openConnection();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+
+            while((line = reader.readLine()) != null)
+            {
+                sb.append(line);
+                break;
+            }
+            Log.d("string",sb.toString());
+            return sb.toString().trim();
+        }
+        catch(Exception e){
+            return new String("Exception: " + e.getMessage());
+        }
+    }
 }
 
 

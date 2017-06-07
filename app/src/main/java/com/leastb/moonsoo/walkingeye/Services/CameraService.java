@@ -30,9 +30,12 @@ public class CameraService extends Service {
     @Nullable
     public boolean loop;
     Calendar cal;
+    GpsService gps;
+    boolean requestGps = false;
     static String PI_IP = "192.168.43.244";
 //static String PI_IP = "192.168.43.247";
     int index;
+    double latitude, longitude;
     public static final String NOTIFICATION = "com.leastb.moonsoo.walkingeye.Fragment";
     public static final String INDEX = "index";
     //서비스 바인더 내부 클래스 선언
@@ -70,6 +73,7 @@ public class CameraService extends Service {
                         intent1.putExtra("text","실시간 감시를 시작합니다");
                         getApplicationContext().startService(intent1); // 서비스 시작
                         Toast.makeText(CameraService.this.getApplicationContext(),"실시간 감시를 시작합니다.",Toast.LENGTH_SHORT).show();
+                        gps = new GpsService(getApplicationContext());
                         String id = ApplicationClass.ID;
                         int year = cal.get(Calendar.YEAR);
                         int month = cal.get(Calendar.MONTH)+1;
@@ -77,7 +81,7 @@ public class CameraService extends Service {
                         long time = System.currentTimeMillis();
                          registWatchDay(id, Integer.toString(year), Integer.toString(month), Integer.toString(day));
                         cameraStart(Long.toString(time), id, Integer.toString(year), Integer.toString(month), Integer.toString(day));
-                        registImage(Long.toString(time), id, Integer.toString(year), Integer.toString(month), Integer.toString(day));
+//                        registImage(Long.toString(time), id, Integer.toString(year), Integer.toString(month), Integer.toString(day));
                     }
                     else
                     {
@@ -146,11 +150,12 @@ public class CameraService extends Service {
             return new String("Exception: " + e.getMessage());
         }
     }
-    private void registImage(String index, String id, String year, String month, String day){
+    private void registImage(String index, String id, String year, String month, String day, String latitude, String longitude){
 
         class RegistTask extends AsyncTask<String, Void, String> {
             String index, id;
             String year, month, day;
+            String latitude, longitude;
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
@@ -168,7 +173,9 @@ public class CameraService extends Service {
                 year = (String)params[2];
                 month = (String)params[3];
                 day = (String)params[4];
-                String[] posts = {index, id, year, month, day};
+                latitude = (String)params[5];
+                longitude = (String)params[6];
+                String[] posts = {index, id, year, month, day, latitude, longitude};
                 DB db = new DB("registImage.php");
                 String result = db.post(posts);
                 Log.d("CameraService", result);
@@ -176,7 +183,7 @@ public class CameraService extends Service {
             }
         }
         RegistTask task = new RegistTask();
-        task.execute(index, id, year, month, day);
+        task.execute(index, id, year, month, day, latitude, longitude);
     }
     private void registWatchDay(String id, String year, String month, String day){
 
@@ -218,6 +225,16 @@ public class CameraService extends Service {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
+                if (gps.isGetLocation()) {
+                    latitude = gps.getLatitude();
+                    longitude = gps.getLongitude();
+                }
+                else {
+                    if(!requestGps) {
+                        gps.showSettingsAlert();
+                        requestGps = true;
+                    }
+                }
             }
 
             @Override
@@ -228,7 +245,7 @@ public class CameraService extends Service {
                     long time = System.currentTimeMillis();
                     registWatchDay(ApplicationClass.ID, Integer.toString(cal.get(Calendar.YEAR)), Integer.toString(cal.get(Calendar.MONTH)+1), Integer.toString(cal.get(Calendar.DATE)));
                     cameraStart(Long.toString(time), ApplicationClass.ID, Integer.toString(cal.get(Calendar.YEAR)), Integer.toString(cal.get(Calendar.MONTH)+1), Integer.toString(cal.get(Calendar.DATE)));
-                    registImage(Long.toString(time), ApplicationClass.ID, Integer.toString(cal.get(Calendar.YEAR)), Integer.toString(cal.get(Calendar.MONTH)+1), Integer.toString(cal.get(Calendar.DATE)));
+//                    registImage(Long.toString(time), ApplicationClass.ID, Integer.toString(cal.get(Calendar.YEAR)), Integer.toString(cal.get(Calendar.MONTH)+1), Integer.toString(cal.get(Calendar.DATE)), Double.toString(latitude), Double.toString(longitude));
                 }
 
             }
@@ -241,6 +258,7 @@ public class CameraService extends Service {
                 year = (String)params[2];
                 month = (String)params[3];
                 day = (String)params[4];
+                registImage(index, id, year, month, day, Double.toString(latitude), Double.toString(longitude));
                 String result = cameraCall(index, id, year, month, day);
                 Log.d("CameraService", result);
                 return result;

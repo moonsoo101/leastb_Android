@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.leastb.moonsoo.walkingeye.BlackBoxActivity;
 import com.leastb.moonsoo.walkingeye.DTO.BlackBoxDTO;
@@ -40,7 +41,7 @@ public class BlackBoxRecyclerAdapter extends RecyclerView.Adapter<BlackBoxRecycl
     @Override
     public void onBindViewHolder(final BlackBoxRecyclerAdapter.ViewHolder holder, int position) {
         BlackBoxDTO item = items.get(position);
-        holder.bitmapDownloaderTask = new BitmapDownloaderTask(holder.blackBoxImg,context);
+        holder.bitmapDownloaderTask = new BitmapDownloaderTask(holder.blackBoxImg, holder.progressBar, context);
         holder.bitmapDownloaderTask.download("http://ec2-13-124-33-214.ap-northeast-2.compute.amazonaws.com/darknet/"+item.getImgName()+".jpg",holder.blackBoxImg);
         if(item.getIsAccident()==1)
             holder.blackBoxImg.setColorFilter(Color.parseColor("#9fcc64de"));
@@ -66,11 +67,13 @@ public class BlackBoxRecyclerAdapter extends RecyclerView.Adapter<BlackBoxRecycl
     public class ViewHolder extends RecyclerView.ViewHolder
     {
         ImageView blackBoxImg;
+        ProgressBar progressBar;
         BitmapDownloaderTask bitmapDownloaderTask;
 
         public ViewHolder(View itemView) {
             super(itemView);
             blackBoxImg = (ImageView) itemView.findViewById(R.id.blackBoxImg);
+            progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar);
         }
     }
 

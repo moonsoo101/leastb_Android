@@ -88,7 +88,7 @@ private BroadcastReceiver receiver = new BroadcastReceiver() {
         PermissionListener permissionlistener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
-                Toast.makeText(MainActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -101,7 +101,7 @@ private BroadcastReceiver receiver = new BroadcastReceiver() {
         new TedPermission(this)
                 .setPermissionListener(permissionlistener)
                 .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
-                .setPermissions(android.Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .setPermissions(Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
                 .check();
         updateToDatabase(ApplicationClass.ID,FirebaseInstanceId.getInstance().getToken());
 

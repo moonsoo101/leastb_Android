@@ -16,7 +16,8 @@ import net.daum.mf.speech.api.TextToSpeechManager;
 
 public class VoiceService extends Service implements TextToSpeechListener {
     private TextToSpeechClient ttsClient;
-    static String APIKEY ="3442a54f5e352782458d10f8dab3077d";
+//    static String APIKEY ="3442a54f5e352782458d10f8dab3077d"; //내꺼
+    static String APIKEY ="a1f5628a1e0da6d4c4ad107ca75bad6e"; //민성이꺼
     String strText;
     @Nullable
     @Override

@@ -62,7 +62,11 @@ public class MyFirebaseMessagingService extends com.google.firebase.messaging.Fi
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
+        Intent intent1 = new Intent(
+                getApplicationContext(),//현재제어권자
+                VoiceService.class); // 이동할 컴포넌트
+        intent1.putExtra("text","전방에 차량이 감지되었습니다. 조심하세요.");
+        getApplicationContext().startService(intent1); // 서비스 시작
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
 

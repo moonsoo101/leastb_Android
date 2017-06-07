@@ -39,7 +39,7 @@ public class BlackBoxRecyclerAdapter extends RecyclerView.Adapter<BlackBoxRecycl
     public void onBindViewHolder(BlackBoxRecyclerAdapter.ViewHolder holder, int position) {
         BlackBoxDTO item = items.get(position);
         holder.bitmapDownloaderTask = new BitmapDownloaderTask(holder.blackBoxImg,context);
-        holder.bitmapDownloaderTask.download("http://ec2-13-124-108-18.ap-northeast-2.compute.amazonaws.com/leastb/"+item.getImgName()+".jpg",holder.blackBoxImg);
+        holder.bitmapDownloaderTask.download("http://ec2-13-124-33-214.ap-northeast-2.compute.amazonaws.com/darknet/"+item.getImgName()+".jpg",holder.blackBoxImg);
 //        holder.thumb.setColorFilter(Color.parseColor("#88000000"));
 
     }

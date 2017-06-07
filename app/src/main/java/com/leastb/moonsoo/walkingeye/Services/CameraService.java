@@ -31,7 +31,7 @@ public class CameraService extends Service {
     public boolean loop;
     Calendar cal;
 //    static String PI_IP = "192.168.43.244";
-static String PI_IP = "192.168.43.244";
+static String PI_IP = "192.168.43.247";
     int index;
     public static final String NOTIFICATION = "com.leastb.moonsoo.walkingeye.Fragment";
     public static final String INDEX = "index";
@@ -74,8 +74,10 @@ static String PI_IP = "192.168.43.244";
                         int year = cal.get(Calendar.YEAR);
                         int month = cal.get(Calendar.MONTH)+1;
                         int day = cal.get(Calendar.DATE);
-                        registWatchDay(id, Integer.toString(year), Integer.toString(month), Integer.toString(day));
-                        cameraStart(Long.toString(System.currentTimeMillis()), id, Integer.toString(year), Integer.toString(month), Integer.toString(day));
+                        long time = System.currentTimeMillis();
+                         registWatchDay(id, Integer.toString(year), Integer.toString(month), Integer.toString(day));
+                        cameraStart(Long.toString(time), id, Integer.toString(year), Integer.toString(month), Integer.toString(day));
+                        registImage(Long.toString(time), id, Integer.toString(year), Integer.toString(month), Integer.toString(day));
                     }
                     else
                     {
@@ -152,6 +154,38 @@ static String PI_IP = "192.168.43.244";
             return new String("Exception: " + e.getMessage());
         }
     }
+    private void registImage(String index, String id, String year, String month, String day){
+
+        class RegistTask extends AsyncTask<String, Void, String> {
+            String index, id;
+            String year, month, day;
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+            }
+
+            @Override
+            protected String doInBackground(String... params) {
+                index = (String)params[0];
+                id = (String)params[1];
+                year = (String)params[2];
+                month = (String)params[3];
+                day = (String)params[4];
+                String[] posts = {index, id, year, month, day};
+                DB db = new DB("registImage.php");
+                String result = db.post(posts);
+                Log.d("CameraService", result);
+                return result;
+            }
+        }
+        RegistTask task = new RegistTask();
+        task.execute(index, id, year, month, day);
+    }
     private void registWatchDay(String id, String year, String month, String day){
 
         class RegistTask extends AsyncTask<String, Void, String> {
@@ -199,7 +233,10 @@ static String PI_IP = "192.168.43.244";
                 super.onPostExecute(s);
                 if(loop) {
                     publishResults(id+year+month+day+"-"+index);
-                    cameraStart(Long.toString(System.currentTimeMillis()), ApplicationClass.ID, Integer.toString(cal.get(Calendar.YEAR)), Integer.toString(cal.get(Calendar.MONTH)+1), Integer.toString(cal.get(Calendar.DATE)));
+                    long time = System.currentTimeMillis();
+                    registWatchDay(ApplicationClass.ID, Integer.toString(cal.get(Calendar.YEAR)), Integer.toString(cal.get(Calendar.MONTH)+1), Integer.toString(cal.get(Calendar.DATE)));
+                    cameraStart(Long.toString(time), ApplicationClass.ID, Integer.toString(cal.get(Calendar.YEAR)), Integer.toString(cal.get(Calendar.MONTH)+1), Integer.toString(cal.get(Calendar.DATE)));
+                    registImage(Long.toString(time), ApplicationClass.ID, Integer.toString(cal.get(Calendar.YEAR)), Integer.toString(cal.get(Calendar.MONTH)+1), Integer.toString(cal.get(Calendar.DATE)));
                 }
 
             }

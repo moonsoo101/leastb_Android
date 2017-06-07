@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -45,6 +46,8 @@ import butterknife.ButterKnife;
 public class TabFragment2 extends Fragment implements OnDateSelectedListener, OnMonthChangedListener {
 
     private static final DateFormat FORMATTER = SimpleDateFormat.getDateInstance();
+    @BindView(R.id.refreshLayout)
+    SwipeRefreshLayout refreshLayout;
     @BindView(R.id.calendarView)
     MaterialCalendarView widget;
     @BindView(R.id.recyclerView)
@@ -67,6 +70,17 @@ public class TabFragment2 extends Fragment implements OnDateSelectedListener, On
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setNestedScrollingEnabled(false);
         searchAccidentDay(ApplicationClass.ID);
+        Calendar cal = Calendar.getInstance();
+        getBlackBox(ApplicationClass.ID, Integer.toString(cal.get(Calendar.YEAR)), Integer.toString(cal.get(Calendar.MONTH)+1), Integer.toString(cal.get(Calendar.DATE)));
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                searchAccidentDay(ApplicationClass.ID);
+                Calendar cal = Calendar.getInstance();
+                getBlackBox(ApplicationClass.ID, Integer.toString(cal.get(Calendar.YEAR)), Integer.toString(cal.get(Calendar.MONTH)+1), Integer.toString(cal.get(Calendar.DATE)));
+                refreshLayout.setRefreshing(false);
+            }
+        });
         return view;
     }
 
@@ -113,8 +127,8 @@ public class TabFragment2 extends Fragment implements OnDateSelectedListener, On
                             else
                                 normalDay.add(CalendarDay.from(c.getInt("year"),c.getInt("month")-1,c.getInt("day")));
                         }
-                        widget.addDecorator(new EventDecorator(Color.RED, accidentDay));
                         widget.addDecorator(new EventDecorator(Color.GREEN, normalDay));
+                        widget.addDecorator(new EventDecorator(Color.RED, accidentDay));
                         widget.invalidateDecorators();
                     }
                 }

@@ -1,6 +1,8 @@
 package com.leastb.moonsoo.walkingeye;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -39,6 +41,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         login_Btn = (Button) findViewById(R.id.login_Btn);
         login_Btn.setOnClickListener(this);
         join_Btn = (Button) findViewById(R.id.join_Btn);
+        join_Btn.setOnClickListener(this);
+        id_Edit.getBackground().setColorFilter(Color.parseColor("#16afca"), PorterDuff.Mode.SRC_IN);
+        pass_Edit.getBackground().setColorFilter(Color.parseColor("#16afca"), PorterDuff.Mode.SRC_IN);
     }
 
     @Override
@@ -51,58 +56,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 searchToDatabase(id_Edit.getText().toString(),pass_Edit.getText().toString());
             }
             break;
+            case    R.id.join_Btn :
+            {
+                Intent intent = new Intent(LoginActivity.this, JoinActivity.class);
+                startActivity(intent);
+            }
+            break;
         }
     }
 
-
-//    private boolean mayRequestContacts() {
-//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-//            return true;
-//        }
-//        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-//            return true;
-//        }
-//        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-//            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-//                    .setAction(android.R.string.ok, new View.OnClickListener() {
-//                        @Override
-//                        @TargetApi(Build.VERSION_CODES.M)
-//                        public void onClick(View v) {
-//                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-//                        }
-//                    });
-//        } else {
-//            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-//        }
-//        return false;
-//    }
-//
-//    /**
-//     * Callback received when a permissions request has been completed.
-//     */
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-//                                           @NonNull int[] grantResults) {
-//        if (requestCode == REQUEST_READ_CONTACTS) {
-//            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                populateAutoComplete();
-//            }
-//        }
-//    }
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
     private void searchToDatabase(String id, String pass){
 
         class searchData extends AsyncTask<String, Void, String> {
             String id;
             String pass;
-            /*WeakReference<Activity> mActivityReference;
-            public searchData(Activity activity){
-                this.mActivityReference = new WeakReference<Activity>(activity);
-            }*/
 
             @Override
             protected void onPreExecute() {

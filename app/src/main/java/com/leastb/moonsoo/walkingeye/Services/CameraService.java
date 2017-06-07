@@ -30,8 +30,8 @@ public class CameraService extends Service {
     @Nullable
     public boolean loop;
     Calendar cal;
-//    static String PI_IP = "192.168.43.244";
-static String PI_IP = "192.168.43.247";
+    static String PI_IP = "192.168.43.244";
+//static String PI_IP = "192.168.43.247";
     int index;
     public static final String NOTIFICATION = "com.leastb.moonsoo.walkingeye.Fragment";
     public static final String INDEX = "index";
@@ -104,14 +104,6 @@ static String PI_IP = "192.168.43.247";
             Toast.makeText(CameraService.this.getApplicationContext(), "실시간 감시를 종료합니다.", Toast.LENGTH_SHORT).show();
             loop = false;
             index = 0;
-        }
-        else {
-            Intent intent = new Intent(
-                    getApplicationContext(),//현재제어권자
-                    VoiceService.class); // 이동할 컴포넌트
-            intent.putExtra("text","실시간 감시가 실행 중이지 않습니다.");
-            getApplicationContext().startService(intent); // 서비스 시작
-            Toast.makeText(CameraService.this.getApplicationContext(), "실시간 감시가 실행 중이지 않습니다.", Toast.LENGTH_SHORT).show();
         }
     }
 

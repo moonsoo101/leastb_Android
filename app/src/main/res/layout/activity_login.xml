@@ -5,13 +5,16 @@
     android:layout_height = "match_parent"
     android:id="@+id/mainLayout"
     android:background="#ffffff">
+
     <EditText
         android:id = "@+id/id_Edit"
         android:layout_width = "279dp"
         android:layout_height = "wrap_content"
         android:layout_marginTop="150dp"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/login_edittext"
+        android:drawableLeft="@drawable/icn_mail_pp"
+        android:drawablePadding="16dp"
+
         android:singleLine="true"
         android:hint = "ID를 입력해 주세요."
         android:textColorHint="#80deea"
@@ -25,7 +28,8 @@
         android:layout_marginTop="10dp"
         android:layout_below="@+id/id_Edit"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/login_edittext"
+        android:drawablePadding="16dp"
+        android:drawableLeft="@drawable/icn_pw_pp"
         android:singleLine="true"
         android:imeOptions="actionDone"
         android:inputType="textPassword"
@@ -55,6 +59,7 @@
         android:textAlignment="center"
         android:text="비밀번호를 잊으셨습니까?"
         android:textColor="#16afca"/>
+
 
     <Button
         android:layout_width="match_parent"

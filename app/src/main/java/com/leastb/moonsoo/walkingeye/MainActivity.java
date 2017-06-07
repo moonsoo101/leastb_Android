@@ -57,8 +57,8 @@ private BroadcastReceiver receiver = new BroadcastReceiver() {
         setStatusBarTranslucent(true);
         FirebaseMessaging.getInstance().subscribeToTopic("news");
         FirebaseInstanceId.getInstance().getToken();
-        Intent intent = new Intent(this, ScreenService.class);
-        startService(intent);
+//        Intent intent = new Intent(this, ScreenService.class);
+//        startService(intent);
 //        btnRead = (Button)findViewById(R.id.readclient);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         mViewPager = (ViewPager) findViewById(R.id.viewPager);

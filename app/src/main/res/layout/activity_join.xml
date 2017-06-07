@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width = "match_parent"
+    android:layout_height = "match_parent"
+    android:id="@+id/mainLayout"
+    android:background="#ffffff">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollcontainer"
+        android:layout_centerInParent="true">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <EditText
+            android:id = "@+id/edit_id"
+            android:layout_width = "279.3dp"
+            android:layout_height = "wrap_content"
+            android:inputType="textEmailAddress"
+            android:layout_centerHorizontal="true"
+            android:singleLine="true"
+            android:textCursorDrawable="@null"
+            android:drawableLeft="@drawable/icn_mail_pp"
+            android:drawablePadding="16dp"
+            android:hint = "ID를 입력해 주세요."
+            android:textColor="#16afca"
+            android:textColorHint="#80deea"
+            android:textSize="12sp"
+            android:selectAllOnFocus="true"/>
+        <EditText
+            android:id = "@+id/edit_pass"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="42.8dp"
+            android:layout_width = "279.3dp"
+            android:inputType="textPassword"
+            android:textCursorDrawable="@null"
+            android:layout_height = "wrap_content"
+            android:singleLine="true"
+            android:maxLength="12"
+            android:drawablePadding="16dp"
+            android:drawableLeft="@drawable/icn_pw_pp"
+            android:hint = "Password를 입력해주세요."
+            android:textColor="#16afca"
+            android:textColorHint="#80deea"
+            android:textSize="12sp"
+            android:selectAllOnFocus="true"/>
+    <EditText
+        android:id = "@+id/edit_repass"
+        android:layout_below="@+id/edit_pass"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="42.8dp"
+        android:layout_width = "279.3dp"
+        android:inputType="textPassword"
+        android:layout_height = "wrap_content"
+        android:singleLine="true"
+        android:textCursorDrawable="@null"
+        android:maxLength="12"
+        android:imeOptions="actionDone"
+        android:drawablePadding="16dp"
+        android:drawableLeft="@drawable/icn_pw_pp"
+        android:hint = "Password를 다시 한 번 더 입력해주세요."
+        android:textColor="#16afca"
+        android:textColorHint="#80deea"
+        android:textSize="12sp"
+        android:selectAllOnFocus="true"/>
+        </RelativeLayout>
+    </ScrollView>
+      <RelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:background="#16afca"
+          android:layout_alignParentBottom="true">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:id="@+id/prevBtn"
+            android:layout_alignParentLeft="true"
+            android:text="이전"
+            android:background="#16afca"
+            android:textColor="#ffffff"
+            android:drawableLeft="@drawable/btn_back_active">
+        </Button>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:id="@+id/nextBtn"
+            android:text="다음"
+            android:background="#16afca"
+            android:textColor="#ffffff"
+            android:drawableRight="@drawable/btn_next_active">
+        </Button>
+  </RelativeLayout>
+  </RelativeLayout>

@@ -41,7 +41,11 @@ public class VoiceService extends Service implements TextToSpeechListener {
                 .setSpeechVoice(TextToSpeechClient.VOICE_WOMAN_READ_CALM)  //TTS 음색 모드 설정(여성 차분한 낭독체)
                 .setListener(this)
                 .build();
-        strText = intent.getStringExtra("text");
+        try {
+            strText = intent.getStringExtra("text");
+        } catch (NullPointerException e ) {
+            strText="";
+        }
         ttsClient.play(strText);
 
 //// 또는

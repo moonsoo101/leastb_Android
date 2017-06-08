@@ -22,8 +22,6 @@ import com.leastb.moonsoo.walkingeye.Services.CameraService;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.leastb.moonsoo.walkingeye.Adapter.TabPagerAdapter;
-import com.leastb.moonsoo.walkingeye.Services.ScreenService;
-import com.leastb.moonsoo.walkingeye.Services.VoiceListenService;
 import com.leastb.moonsoo.walkingeye.Services.VoiceService;
 import com.leastb.moonsoo.walkingeye.Util.DB;
 
@@ -64,7 +62,7 @@ private BroadcastReceiver receiver = new BroadcastReceiver() {
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
         tabLayout.addTab(tabLayout.newTab().setText("전방감시"));
         tabLayout.addTab(tabLayout.newTab().setText("블랙박스"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab Three"));
+        tabLayout.addTab(tabLayout.newTab().setText("이동 경로"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         mPagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         mViewPager.setAdapter(mPagerAdapter);

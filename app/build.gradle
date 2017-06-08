@@ -18,9 +18,9 @@ android {
         }
     }
 }
-repositories {
-    mavenCentral() // jcenter() works as well because it pulls from Maven Central
-}
+//repositories {
+//    mavenCentral() // jcenter() works as well because it pulls from Maven Central
+//}
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -41,5 +41,6 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
     testCompile 'junit:junit:4.12'
     compile project(':daum-speech-openapi-5.0')
+    compile files('libs/libDaumMapAndroid.jar')
 }
 apply plugin: 'com.google.gms.google-services'

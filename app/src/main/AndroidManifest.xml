@@ -38,6 +38,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
         <activity android:name=".BlackBoxActivity"/>
+        <activity android:name=".PolygonDemoActivity" />
         <service
             android:name=".Services.MyFirebaseMessagingService">
             <intent-filter>

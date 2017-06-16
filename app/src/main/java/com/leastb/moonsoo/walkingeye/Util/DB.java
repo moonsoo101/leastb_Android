@@ -13,22 +13,21 @@ import java.net.URLEncoder;
 public class DB {
     String link;
     String php;
-    public DB(String php)
-    {
+
+    public DB(String php) {
         this.php = php;
     }
 
-    public String post(String[] posts)
-    {
-        Log.d("result","post");
+    public String post(String[] posts) {
+        Log.d("result", "post");
         try {
-            link = "http://ec2-13-124-108-18.ap-northeast-2.compute.amazonaws.com/leastb/"+php;
-            String data="";
-            for(int i =1;i<=posts.length;i++) {
-                if(i==1)
-                    data = URLEncoder.encode("post"+i, "UTF-8") + "=" + URLEncoder.encode(posts[i-1], "UTF-8");
+            link = "http://ec2-13-124-108-18.ap-northeast-2.compute.amazonaws.com/leastb/" + php;
+            String data = "";
+            for (int i = 1; i <= posts.length; i++) {
+                if (i == 1)
+                    data = URLEncoder.encode("post" + i, "UTF-8") + "=" + URLEncoder.encode(posts[i - 1], "UTF-8");
                 else
-                    data += "&" + URLEncoder.encode("post"+i, "UTF-8") + "=" + URLEncoder.encode(posts[i-1], "UTF-8");
+                    data += "&" + URLEncoder.encode("post" + i, "UTF-8") + "=" + URLEncoder.encode(posts[i - 1], "UTF-8");
             }
 
             URL url = new URL(link);
@@ -44,29 +43,27 @@ public class DB {
             StringBuilder sb = new StringBuilder();
             String line = null;
 
-            while((line = reader.readLine()) != null)
-            {
+            while ((line = reader.readLine()) != null) {
                 sb.append(line);
                 break;
             }
-            Log.d("string",sb.toString());
+            Log.d("string", sb.toString());
             return sb.toString().trim();
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             return new String("Exception: " + e.getMessage());
         }
     }
-    public String postYolo(String[] posts)
-    {
-        Log.d("result","post");
+
+    public String postYolo(String[] posts) {
+        Log.d("result", "post");
         try {
-            link = "http://13.124.33.214/darknet/"+php;
-            String data="";
-            for(int i =1;i<=posts.length;i++) {
-                if(i==1)
-                    data = URLEncoder.encode("post"+i, "UTF-8") + "=" + URLEncoder.encode(posts[i-1], "UTF-8");
+            link = "http://13.124.33.214/darknet/" + php;
+            String data = "";
+            for (int i = 1; i <= posts.length; i++) {
+                if (i == 1)
+                    data = URLEncoder.encode("post" + i, "UTF-8") + "=" + URLEncoder.encode(posts[i - 1], "UTF-8");
                 else
-                    data += "&" + URLEncoder.encode("post"+i, "UTF-8") + "=" + URLEncoder.encode(posts[i-1], "UTF-8");
+                    data += "&" + URLEncoder.encode("post" + i, "UTF-8") + "=" + URLEncoder.encode(posts[i - 1], "UTF-8");
             }
 
             URL url = new URL(link);
@@ -82,21 +79,19 @@ public class DB {
             StringBuilder sb = new StringBuilder();
             String line = null;
 
-            while((line = reader.readLine()) != null)
-            {
+            while ((line = reader.readLine()) != null) {
                 sb.append(line);
                 break;
             }
-            Log.d("string",sb.toString());
+            Log.d("string", sb.toString());
             return sb.toString().trim();
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             return new String("Exception: " + e.getMessage());
         }
     }
-    public String getLocation(String postURL)
-    {
-        Log.d("result","post");
+
+    public String getLocation(String postURL) {
+        Log.d("result", "post");
         try {
             URL url = new URL(postURL);
             URLConnection conn = url.openConnection();
@@ -105,15 +100,13 @@ public class DB {
             StringBuilder sb = new StringBuilder();
             String line = null;
 
-            while((line = reader.readLine()) != null)
-            {
+            while ((line = reader.readLine()) != null) {
                 sb.append(line);
                 break;
             }
-            Log.d("string",sb.toString());
+            Log.d("string", sb.toString());
             return sb.toString().trim();
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             return new String("Exception: " + e.getMessage());
         }
     }

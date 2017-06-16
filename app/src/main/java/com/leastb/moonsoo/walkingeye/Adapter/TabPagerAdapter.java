@@ -1,8 +1,5 @@
 package com.leastb.moonsoo.walkingeye.Adapter;
 
-/**
- * Created by wisebody on 2017. 5. 29..
- */
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,10 +8,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import com.leastb.moonsoo.walkingeye.Fragment.TabFragment1;
 import com.leastb.moonsoo.walkingeye.Fragment.TabFragment2;
 import com.leastb.moonsoo.walkingeye.Fragment.TabFragment3;
-
-/**
- * Created by Junyoung on 2016-06-23.
- */
 
 public class TabPagerAdapter extends FragmentStatePagerAdapter {
 

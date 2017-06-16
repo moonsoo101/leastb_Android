@@ -1,7 +1,5 @@
 package com.leastb.moonsoo.walkingeye.Fragment;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,35 +9,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.leastb.moonsoo.walkingeye.Services.CameraService;
 import com.leastb.moonsoo.walkingeye.R;
-import com.leastb.moonsoo.walkingeye.Services.VoiceService;
+import com.leastb.moonsoo.walkingeye.Services.CameraService;
 import com.squareup.picasso.Picasso;
 
-/**
- * Created by Junyoung on 2016-06-23.
- */
 
 public class TabFragment1 extends Fragment {
     View view;
     ImageView imageView;
     Button startBtn, stopBtn;
 
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Bundle bundle = intent.getExtras();
-            if (bundle != null) {
-                int index = bundle.getInt(CameraService.INDEX);
-            }
-        }
-    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.tab_fragment_1, container, false);
-        imageView = (ImageView)view.findViewById(R.id.img);
+        imageView = (ImageView) view.findViewById(R.id.img);
         startBtn = (Button) view.findViewById(R.id.startBtn);
         stopBtn = (Button) view.findViewById(R.id.stopBtn);
         startBtn.setOnClickListener(new View.OnClickListener() {
@@ -54,17 +38,18 @@ public class TabFragment1 extends Fragment {
         stopBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    Intent intent = new Intent(
-                            getActivity(),//현재제어권자
-                            CameraService.class); // 이동할 컴포넌트
-                    getActivity().stopService(intent); // 서비스 종료
+                Intent intent = new Intent(
+                        getActivity(),//현재제어권자
+                        CameraService.class); // 이동할 컴포넌트
+                getActivity().stopService(intent); // 서비스 종료
             }
         });
         return view;
     }
-    public void loadPicture(String index)
-    {
-        String url = "http://13.124.33.214/darknet/"+index+".jpg";
+
+    public void loadPicture(String index) {
+        String url = "http://13.124.33.214/darknet/" + index + ".jpg";
         Picasso.with(getActivity()).load(url).into(imageView);
     }
+
 }

@@ -52,12 +52,13 @@ public class BitmapDownloaderTask extends AsyncTask<String, Void, String> {
 
             if (this == bitmapDownloaderTask) {
                 Picasso.with(context).load(url).fit().into(imageView);
-                if(progressBar!=null)
-                progressBar.setVisibility(View.GONE);
+                if (progressBar != null)
+                    progressBar.setVisibility(View.GONE);
             }
             bitmapDownloaderTask = null;
         }
     }
+
     static class DownloadedDrawable extends ColorDrawable {
         private final WeakReference<BitmapDownloaderTask> bitmapDownloaderTaskReference;
 
@@ -71,6 +72,7 @@ public class BitmapDownloaderTask extends AsyncTask<String, Void, String> {
             return bitmapDownloaderTaskReference.get();
         }
     }
+
     public void download(String url, ImageView imageView) {
         if (cancelPotentialDownload(url, imageView)) {
            /* BitmapDownloaderTask task = new BitmapDownloaderTask(imageView, progressBar);*/
@@ -79,6 +81,7 @@ public class BitmapDownloaderTask extends AsyncTask<String, Void, String> {
             this.execute(url);
         }
     }
+
     private static boolean cancelPotentialDownload(String url, ImageView imageView) {
         BitmapDownloaderTask bitmapDownloaderTask = getBitmapDownloaderTask(imageView);
 
@@ -93,11 +96,12 @@ public class BitmapDownloaderTask extends AsyncTask<String, Void, String> {
         }
         return true;
     }
+
     private static BitmapDownloaderTask getBitmapDownloaderTask(ImageView imageView) {
         if (imageView != null) {
             Drawable drawable = imageView.getDrawable();
             if (drawable instanceof DownloadedDrawable) {
-                DownloadedDrawable downloadedDrawable = (DownloadedDrawable)drawable;
+                DownloadedDrawable downloadedDrawable = (DownloadedDrawable) drawable;
                 return downloadedDrawable.getBitmapDownloaderTask();
             }
         }

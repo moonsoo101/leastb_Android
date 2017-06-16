@@ -3,12 +3,11 @@ package com.leastb.moonsoo.walkingeye;
 import android.app.Application;
 import android.content.res.Configuration;
 
-/**
- * Created by wisebody on 2017. 5. 27..
- */
+
 
 public class ApplicationClass extends Application {
     public static String ID;
+
     @Override
     public void onCreate() {
         super.onCreate();

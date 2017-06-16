@@ -2,8 +2,8 @@ package com.leastb.moonsoo.walkingeye.Services;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import net.daum.mf.speech.api.TextToSpeechClient;
@@ -16,20 +16,32 @@ import net.daum.mf.speech.api.TextToSpeechManager;
 
 public class VoiceService extends Service implements TextToSpeechListener {
     private TextToSpeechClient ttsClient;
-    static String APIKEY ="3442a54f5e352782458d10f8dab3077d"; //내꺼
+    //    static String APIKEY ="3442a54f5e352782458d10f8dab3077d"; //내꺼
 //    static String APIKEY ="a1f5628a1e0da6d4c4ad107ca75bad6e"; //민성이꺼
+    static String APIKEY = "7ade9bd6fd2bffeeed8a3981138afd08";
+    private final IBinder binder = new LocalBinder();
     String strText;
-    @Nullable
+
+    public class LocalBinder extends Binder {
+        public VoiceService getService() {
+            // Return this instance of MyService so clients can call public methods
+            return VoiceService.this;
+        }
+    }
+
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return binder;
     }
+
+
     @Override
     public void onCreate() {
         super.onCreate();
         TextToSpeechManager.getInstance().initializeLibrary(this);
 
     }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // 서비스가 호출될 때마다 실행
@@ -43,8 +55,8 @@ public class VoiceService extends Service implements TextToSpeechListener {
                 .build();
         try {
             strText = intent.getStringExtra("text");
-        } catch (NullPointerException e ) {
-            strText="";
+        } catch (NullPointerException e) {
+            strText = "";
         }
         ttsClient.play(strText);
 
@@ -67,7 +79,7 @@ public class VoiceService extends Service implements TextToSpeechListener {
         int intRecvSize = ttsClient.getReceivedDataSize();  //세션 중에 전송받은 데이터 사이즈
 
         final String strInacctiveText = "handleFinished() SentSize : " + intSentSize + "     RecvSize : " + intRecvSize;
-        if(strText.equals("실행하실 동작을 말씀해 주세요.")) {
+        if (strText.equals("실행하실 동작을 말씀해 주세요.")) {
             Intent intent = new Intent(
                     getApplicationContext(),//현재제어권자
                     VoiceListenService.class);

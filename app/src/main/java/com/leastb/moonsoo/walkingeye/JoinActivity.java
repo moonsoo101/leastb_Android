@@ -1,8 +1,5 @@
 package com.leastb.moonsoo.walkingeye;
 
-/**
- * Created by wisebody on 2016. 6. 28..
- */
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -32,7 +29,7 @@ public class JoinActivity extends Activity {
     private EditText t_repass;
     Button nextBtn, prevBtn;
     private int[] flag;
-    RelativeLayout mainlayout;
+    RelativeLayout mainLayout;
     ScrollView scrollView;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +43,10 @@ public class JoinActivity extends Activity {
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(flag[0]==1&&flag[1]==1)
-                {
-                    insertToDatabase(t_id.getText().toString(),t_pass.getText().toString());
+                if (flag[0] == 1 && flag[1] == 1) {
+                    insertToDatabase(t_id.getText().toString(), t_pass.getText().toString());
                     finish();
-                }
-                else {
+                } else {
                     if (flag[0] == 0)
                         Toast.makeText(getApplicationContext(), "ID가 중복됩니다", Toast.LENGTH_LONG).show();
                     else
@@ -66,8 +61,8 @@ public class JoinActivity extends Activity {
                 finish();
             }
         });
-        mainlayout = (RelativeLayout)findViewById(R.id.mainLayout);
-        mainlayout.setOnClickListener(new View.OnClickListener() {
+        mainLayout = (RelativeLayout) findViewById(R.id.mainLayout);
+        mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -78,8 +73,7 @@ public class JoinActivity extends Activity {
         scrollView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN)
-                {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 }
@@ -94,7 +88,7 @@ public class JoinActivity extends Activity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-               checkID(t_id.getText().toString());
+                checkID(t_id.getText().toString());
             }
 
 
@@ -112,14 +106,12 @@ public class JoinActivity extends Activity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(t_pass.getText().toString().equals(t_repass.getText().toString())) {
+                if (t_pass.getText().toString().equals(t_repass.getText().toString())) {
                     t_repass.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icn_pw_pp, 0, R.drawable.icn_okay_v_copy, 0);
-                    flag[1]=1;
-                }
-                else
-                {
+                    flag[1] = 1;
+                } else {
                     t_repass.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icn_pw_pp, 0, R.drawable.icn_no_x, 0);
-                    flag[1]=0;
+                    flag[1] = 0;
                 }
 
             }
@@ -139,7 +131,7 @@ public class JoinActivity extends Activity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(t_pass.getText().toString().length()>0)
+                if (t_pass.getText().toString().length() > 0)
                     t_pass.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icn_pw_pp, 0, R.drawable.icn_okay_v_copy, 0);
 
                 else
@@ -160,7 +152,7 @@ public class JoinActivity extends Activity {
         });
     }
 
-    private void insertToDatabase(String id, String pass){
+    private void insertToDatabase(String id, String pass) {
 
         class InsertData extends AsyncTask<String, Void, String> {
             ProgressDialog loading;
@@ -185,11 +177,11 @@ public class JoinActivity extends Activity {
             protected String doInBackground(String... params) {
 
                 DB db = new DB("join.php");
-                id = (String)params[0];
-                pass = (String)params[1];
+                id = (String) params[0];
+                pass = (String) params[1];
                 String[] posts = {id, pass};
                 String result = db.post(posts);
-                Log.d(result,"result");
+                Log.d(result, "result");
                 return result;
             }
         }
@@ -198,22 +190,21 @@ public class JoinActivity extends Activity {
         InsertData task = new InsertData();
         task.execute(id, pass);
     }
-    private void checkID(String id){
+
+    private void checkID(String id) {
 
         class InsertData extends AsyncTask<String, Void, String> {
             String id;
+
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                if(s.equals("ID중복")||id.length()<1)
-                {
-                    flag[0]=0;
+                if (s.equals("ID중복") || id.length() < 1) {
+                    flag[0] = 0;
                     t_id.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icn_mail_pp, 0, R.drawable.icn_no_x, 0);
 
-                }
-                else
-                {
-                    flag[0]=1;
+                } else {
+                    flag[0] = 1;
                     t_id.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icn_mail_pp, 0, R.drawable.icn_okay_v_copy, 0);
                 }
             }
@@ -222,10 +213,10 @@ public class JoinActivity extends Activity {
             protected String doInBackground(String... params) {
 
                 DB db = new DB("dupli.php");
-                id = (String)params[0];
+                id = (String) params[0];
                 String[] posts = {id};
                 String result = db.post(posts);
-                Log.d(result,"result");
+                Log.d(result, "result");
                 return result;
             }
         }

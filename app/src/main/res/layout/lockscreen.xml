@@ -19,7 +19,6 @@
       <ImageView
           android:layout_width="30dp"
           android:layout_height="30dp"
-          android:id="@+id/play_area"
           android:layout_gravity="center"
           android:background="@drawable/ic_play_circle_outline_black_24dp"/>
    </FrameLayout>
@@ -55,7 +54,6 @@
    <ImageView
        android:layout_width="30dp"
        android:layout_height="30dp"
-       android:id="@+id/unlock_area"
        android:layout_gravity="center"
        android:background="@drawable/ic_lock_open_black_24dp"/>
    </FrameLayout>

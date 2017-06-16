@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,8 +11,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-
-import com.leastb.moonsoo.walkingeye.DTO.WatchDayDTO;
 import com.leastb.moonsoo.walkingeye.Util.DB;
 
 import net.daum.mf.map.api.CameraUpdateFactory;
@@ -37,8 +34,8 @@ public class PolygonDemoActivity extends Activity implements MapView.MapViewEven
     private static final int MENU_REMOVE_CIRCLE = Menu.FIRST + 4;
     MapPolyline polyline1;
     private MapView mMapView;
-    MapPoint start=null;
-    MapPoint end=null;
+    MapPoint start = null;
+    MapPoint end = null;
     Button add;
     int size;
     int id;
@@ -49,8 +46,8 @@ public class PolygonDemoActivity extends Activity implements MapView.MapViewEven
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.demo_nested_mapview);
-        id = getIntent().getIntExtra("id",0);
-        Log.d("ssibal",Integer.toString(id));
+        id = getIntent().getIntExtra("id", 0);
+        Log.d("ssibal", Integer.toString(id));
         mMapView = (MapView) findViewById(R.id.map_view);
         mMapView.setDaumMapApiKey("3442a54f5e352782458d10f8dab3077d");
         mMapView.setMapViewEventListener(this);
@@ -79,7 +76,7 @@ public class PolygonDemoActivity extends Activity implements MapView.MapViewEven
 //                MapPoint.mapPointWithWCONGCoord(484893.0,1117930.0),
 //                MapPoint.mapPointWithWCONGCoord(485016.0,1118034.0)
 //        };
-        add = (Button)findViewById(R.id.draw);
+        add = (Button) findViewById(R.id.draw);
         add.setVisibility(View.INVISIBLE);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +86,8 @@ public class PolygonDemoActivity extends Activity implements MapView.MapViewEven
             }
         });
     }
-    private void searchCoordi(String id){
+
+    private void searchCoordi(String id) {
 
         class searchData extends AsyncTask<String, Void, String> {
             String id;
@@ -105,39 +103,38 @@ public class PolygonDemoActivity extends Activity implements MapView.MapViewEven
                 try {
                     JSONObject jsonObj = new JSONObject(s);
                     JSONArray jsonArray = jsonObj.getJSONArray("result");
-                    if(jsonArray.length()>0) {
+                    if (jsonArray.length() > 0) {
                         int count = 0;
-                        Double latitude=0D;
-                        Double longitude=0D;
+                        Double latitude = 0D;
+                        Double longitude = 0D;
                         polyline1 = new MapPolyline();
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject c = jsonArray.getJSONObject(i);
-                            if(!c.getString("latitude").equals("null")) {
+                            if (!c.getString("latitude").equals("null")) {
                                 count++;
                                 latitude = Double.parseDouble(c.getString("latitude"));
                                 longitude = Double.parseDouble(c.getString("longitude"));
                                 polyline1.addPoint(MapPoint.mapPointWithGeoCoord(latitude, longitude));
                             }
                         }
-                        if(count>0) {
+                        if (count > 0) {
                             add.setVisibility(View.VISIBLE);
                             end = MapPoint.mapPointWithGeoCoord(latitude, longitude);
                         }
                     }
 
-                }
-                catch (JSONException e)
-                {
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
+
             @Override
             protected String doInBackground(String... params) {
                 id = (String) params[0];
                 String[] posts = {id};
                 DB db = new DB("getCoordi.php");
                 String result = db.post(posts);
-                Log.d("result",result);
+                Log.d("result", result);
                 return result;
             }
         }
@@ -179,11 +176,11 @@ public class PolygonDemoActivity extends Activity implements MapView.MapViewEven
                 mMapView.removeAllPolylines();
                 return true;
             }
-            case MENU_ADD_CIRCLES : {
+            case MENU_ADD_CIRCLES: {
                 addCircles();
                 return true;
             }
-            case MENU_REMOVE_CIRCLE : {
+            case MENU_REMOVE_CIRCLE: {
                 mMapView.removeAllCircles();
 
                 return true;
@@ -196,24 +193,24 @@ public class PolygonDemoActivity extends Activity implements MapView.MapViewEven
 
     private void addCircles() {
         MapCircle circle1 = new MapCircle(
-        		MapPoint.mapPointWithGeoCoord(37.537094, 127.005470), // center
-        		500, // radius
-        		Color.argb(128, 255, 0, 0), // strokeColor
-        		Color.argb(128, 0, 255, 0) // fillColor
+                MapPoint.mapPointWithGeoCoord(37.537094, 127.005470), // center
+                500, // radius
+                Color.argb(128, 255, 0, 0), // strokeColor
+                Color.argb(128, 0, 255, 0) // fillColor
         );
         circle1.setTag(1234);
         mMapView.addCircle(circle1);
         MapCircle circle2 = new MapCircle(
-        		MapPoint.mapPointWithGeoCoord(37.551094, 127.019470), // center
-        		1000, // radius
-        		Color.argb(128, 255, 0, 0), // strokeColor
-        		Color.argb(128, 255, 255, 0) // fillColor
+                MapPoint.mapPointWithGeoCoord(37.551094, 127.019470), // center
+                1000, // radius
+                Color.argb(128, 255, 0, 0), // strokeColor
+                Color.argb(128, 255, 255, 0) // fillColor
         );
         circle2.setTag(5678);
         mMapView.addCircle(circle2);
-        
-     // 지도뷰의 중심좌표와 줌레벨을 Circle이 모두 나오도록 조정.
-        MapPointBounds[] mapPointBoundsArray = { circle1.getBound(), circle2.getBound() };
+
+        // 지도뷰의 중심좌표와 줌레벨을 Circle이 모두 나오도록 조정.
+        MapPointBounds[] mapPointBoundsArray = {circle1.getBound(), circle2.getBound()};
         MapPointBounds mapPointBounds = new MapPointBounds(mapPointBoundsArray);
         int padding = 50; // px
         mMapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding));
@@ -258,7 +255,7 @@ public class PolygonDemoActivity extends Activity implements MapView.MapViewEven
         poiItemEnd.setCustomImageAnchorPointOffset(new MapPOIItem.ImageOffset(29, 2));
         mMapView.addPOIItem(poiItemEnd);
 
-        MapPolyline polyline2 = new MapPolyline(size-3);
+        MapPolyline polyline2 = new MapPolyline(size - 3);
         polyline2.setTag(2000);
         polyline2.setLineColor(Color.argb(128, 0, 0, 255));
         polyline2.addPoints(mPolyline2Points);

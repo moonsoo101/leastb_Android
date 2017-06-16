@@ -1,8 +1,5 @@
 package com.leastb.moonsoo.walkingeye.DTO;
 
-/**
- * Created by wisebody on 2017. 6. 8..
- */
 
 public class WatchDayDTO {
     private int id;

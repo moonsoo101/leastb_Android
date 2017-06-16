@@ -17,14 +17,12 @@ import com.leastb.moonsoo.walkingeye.Util.BitmapDownloaderTask;
 
 import java.util.List;
 
-/**
- * Created by wisebody on 2017. 6. 7..
- */
 
 public class BlackBoxRecyclerAdapter extends RecyclerView.Adapter<BlackBoxRecyclerAdapter.ViewHolder> {
     List<BlackBoxDTO> items;
     int itemLayout;
     Context context;
+
     public BlackBoxRecyclerAdapter(List<BlackBoxDTO> items, int itemLayout) {
         this.items = items;
         this.itemLayout = itemLayout;
@@ -34,7 +32,7 @@ public class BlackBoxRecyclerAdapter extends RecyclerView.Adapter<BlackBoxRecycl
     public BlackBoxRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(itemLayout, parent, false);
         context = parent.getContext();
-        return new ViewHolder(v) ;
+        return new ViewHolder(v);
 
     }
 
@@ -42,8 +40,8 @@ public class BlackBoxRecyclerAdapter extends RecyclerView.Adapter<BlackBoxRecycl
     public void onBindViewHolder(final BlackBoxRecyclerAdapter.ViewHolder holder, int position) {
         BlackBoxDTO item = items.get(position);
         holder.bitmapDownloaderTask = new BitmapDownloaderTask(holder.blackBoxImg, holder.progressBar, context);
-        holder.bitmapDownloaderTask.download("http://ec2-13-124-33-214.ap-northeast-2.compute.amazonaws.com/darknet/"+item.getImgName()+".jpg",holder.blackBoxImg);
-        if(item.getIsAccident()==1)
+        holder.bitmapDownloaderTask.download("http://ec2-13-124-33-214.ap-northeast-2.compute.amazonaws.com/darknet/" + item.getImgName() + ".jpg", holder.blackBoxImg);
+        if (item.getIsAccident() == 1)
             holder.blackBoxImg.setColorFilter(Color.parseColor("#9fcc64de"));
         else
             holder.blackBoxImg.setColorFilter(Color.parseColor("#9f6d64de"));
@@ -64,8 +62,7 @@ public class BlackBoxRecyclerAdapter extends RecyclerView.Adapter<BlackBoxRecycl
         return items.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder
-    {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView blackBoxImg;
         ProgressBar progressBar;
         BitmapDownloaderTask bitmapDownloaderTask;

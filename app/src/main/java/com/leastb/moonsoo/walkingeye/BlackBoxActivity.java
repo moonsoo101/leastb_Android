@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.leastb.moonsoo.walkingeye.Util.DB;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,15 +21,13 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Created by wisebody on 2017. 6. 8..
- */
 
 public class BlackBoxActivity extends Activity {
     ImageView imgView;
     String url;
     ProgressBar progressBar;
     TextView dateT_View, locationT_View;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +37,7 @@ public class BlackBoxActivity extends Activity {
         dateT_View = (TextView) findViewById(R.id.date);
         locationT_View = (TextView) findViewById(R.id.location);
         String imgName = getIntent().getStringExtra("imgName");
-        int isAccident = getIntent().getIntExtra("isAccident",0);
+        int isAccident = getIntent().getIntExtra("isAccident", 0);
         getCoordi(imgName);
         String[] arr = imgName.split("-");
         long time = Long.parseLong(arr[1]);
@@ -46,16 +45,16 @@ public class BlackBoxActivity extends Activity {
         SimpleDateFormat sdfNow = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         String strDate = sdfNow.format(date);
         dateT_View.setText(strDate);
-        if(isAccident ==1)
+        if (isAccident == 1)
             checkGIF(imgName);
-        else
-        {
+        else {
             url = "http://13.124.33.214/darknet/" + imgName + ".jpg";
-            Glide.with(this).load(url).into(imgView);
+            Picasso.with(this).load(url).fit().into(imgView);
             progressBar.setVisibility(View.GONE);
         }
     }
-    private void getCoordi(String imgName){
+
+    private void getCoordi(String imgName) {
 
         class GetCoordiTask extends AsyncTask<String, Void, String> {
             String imgName;
@@ -65,46 +64,47 @@ public class BlackBoxActivity extends Activity {
                 super.onPreExecute();
 
             }
+
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
                 try {
                     JSONObject jsonObj = new JSONObject(s);
                     JSONArray jsonArray = jsonObj.getJSONArray("result");
-                    String latitude="", longitude="";
-                    if(jsonArray.length()>0) {
+                    String latitude = "", longitude = "";
+                    if (jsonArray.length() > 0) {
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject c = jsonArray.getJSONObject(i);
                             latitude = c.getString("latitude");
                             longitude = c.getString("longitude");
                         }
                     }
-                    if(latitude.equals("null"))
+                    if (latitude.equals("null"))
                         locationT_View.setText("위치가 측정되지 않은 사진입니다.");
                     else
-                    getLocation(latitude, longitude);
-                }
-                catch (JSONException e)
-                {
+                        getLocation(latitude, longitude);
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
             }
+
             @Override
             protected String doInBackground(String... params) {
-                Log.d("result","back");
+                Log.d("result", "back");
                 imgName = (String) params[0];
                 String[] posts = {imgName};
                 DB db = new DB("getImageLoc.php");
                 String result = db.post(posts);
-                Log.d("result",result);
+                Log.d("result", result);
                 return result;
             }
         }
-       GetCoordiTask task = new GetCoordiTask();
+        GetCoordiTask task = new GetCoordiTask();
         task.execute(imgName);
     }
-    private void getLocation(String latitude, String longitude){
+
+    private void getLocation(String latitude, String longitude) {
 
         class GetLocTask extends AsyncTask<String, Void, String> {
             String latitude, longitude;
@@ -114,6 +114,7 @@ public class BlackBoxActivity extends Activity {
                 super.onPreExecute();
 
             }
+
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
@@ -122,28 +123,28 @@ public class BlackBoxActivity extends Activity {
                     String location = jsonObj.getString("fullName");
                     locationT_View.setText(location);
 
-                }
-                catch (JSONException e)
-                {
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
             }
+
             @Override
             protected String doInBackground(String... params) {
-                Log.d("result","back");
+                Log.d("result", "back");
                 latitude = (String) params[0];
                 longitude = (String) params[1];
                 DB db = new DB("");
-                String result = db.getLocation("https://apis.daum.net/local/geo/coord2addr?apikey=d60942a7d1be4500fe58c3abd4d58110&longitude="+longitude+"&latitude="+latitude+"&inputCoordSystem=WGS84&output=json");
-                Log.d("location result",result);
+                String result = db.getLocation("https://apis.daum.net/local/geo/coord2addr?apikey=d60942a7d1be4500fe58c3abd4d58110&longitude=" + longitude + "&latitude=" + latitude + "&inputCoordSystem=WGS84&output=json");
+                Log.d("location result", result);
                 return result;
             }
         }
         GetLocTask task = new GetLocTask();
         task.execute(latitude, longitude);
     }
-    private void checkGIF(String imgName){
+
+    private void checkGIF(String imgName) {
 
         class CheckGIFTask extends AsyncTask<String, Void, String> {
             String imgName;
@@ -161,14 +162,15 @@ public class BlackBoxActivity extends Activity {
                 Glide.with(getApplicationContext()).load(url).into(imgView);
                 progressBar.setVisibility(View.GONE);
             }
+
             @Override
             protected String doInBackground(String... params) {
-                Log.d("result","back");
+                Log.d("result", "back");
                 imgName = (String) params[0];
                 String[] posts = {imgName};
                 DB db = new DB("checkGIF.php");
                 String result = db.postYolo(posts);
-                Log.d("result",result);
+                Log.d("result", result);
                 return result;
             }
         }

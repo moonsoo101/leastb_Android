@@ -1,6 +1,5 @@
 package com.leastb.moonsoo.walkingeye;
 
-import android.*;
 import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -31,22 +30,24 @@ public class MainActivity extends AppCompatActivity {
 
     private TabLayout tabLayout;
     private ViewPager mViewPager;
-    private TabPagerAdapter mPagerAdapter;
-//    TextView textResult;
+    public TabPagerAdapter mPagerAdapter;
+    private VoiceService voiceService;
+    private boolean bound = false;
+    //    TextView textResult;
 //
 //    ArrayList<Node> listNote;
-private BroadcastReceiver receiver = new BroadcastReceiver() {
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        Bundle bundle = intent.getExtras();
-        if (bundle != null) {
-            String index = bundle.getString(CameraService.INDEX);
-            mPagerAdapter.tabFragment1.loadPicture(index);
-            Log.d("index",index);
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            if (bundle != null) {
+                String index = bundle.getString(CameraService.INDEX);
+                mPagerAdapter.tabFragment1.loadPicture(index);
+                Log.d("index", index);
+            }
         }
-    }
-};
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +102,7 @@ private BroadcastReceiver receiver = new BroadcastReceiver() {
                 .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
                 .setPermissions(Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
                 .check();
-        updateToDatabase(ApplicationClass.ID,FirebaseInstanceId.getInstance().getToken());
+        updateToDatabase(ApplicationClass.ID, FirebaseInstanceId.getInstance().getToken());
 
 //        textResult = (TextView)findViewById(R.id.result);
 //
@@ -120,25 +121,33 @@ private BroadcastReceiver receiver = new BroadcastReceiver() {
 //            }
 //        });
     }
+
     @Override
-    protected void onResume()
-    {
+    protected void onStart() {
+        super.onStart();
+
+    }
+
+    @Override
+    protected void onResume() {
         super.onResume();
         registerReceiver(receiver, new IntentFilter(CameraService.NOTIFICATION));
     }
+
     @Override
     protected void onPause() {
         super.onPause();
         unregisterReceiver(receiver);
     }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if ((keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)){
-            Log.d("volume","down");
+        if ((keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)) {
+            Log.d("volume", "down");
             Intent intent = new Intent(
                     getApplicationContext(),//현재제어권자
                     VoiceService.class); // 이동할 컴포넌트
-            intent.putExtra("text","실행하실 동작을 말씀해 주세요.");
+            intent.putExtra("text", "실행하실 동작을 말씀해 주세요.");
             getApplicationContext().startService(intent);
 
         }
@@ -152,13 +161,14 @@ private BroadcastReceiver receiver = new BroadcastReceiver() {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
     }
-    private void updateToDatabase(String id, String token){
 
-        class searchData extends AsyncTask<String, Void, String> {
+    private void updateToDatabase(String id, String token) {
+
+        class SearchData extends AsyncTask<String, Void, String> {
             String id;
             String token;
             /*WeakReference<Activity> mActivityReference;
-            public searchData(Activity activity){
+            public SearchData(Activity activity){
                 this.mActivityReference = new WeakReference<Activity>(activity);
             }*/
 
@@ -172,21 +182,24 @@ private BroadcastReceiver receiver = new BroadcastReceiver() {
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
             }
+
             @Override
             protected String doInBackground(String... params) {
-                Log.d("result","back");
+                Log.d("result", "back");
                 id = (String) params[0];
                 token = (String) params[1];
                 String[] posts = {id, token};
                 DB db = new DB("register.php");
                 String result = db.post(posts);
-                Log.d("result",result);
+                Log.d("result", result);
                 return result;
             }
         }
-        searchData task = new searchData();
+        SearchData task = new SearchData();
         task.execute(id, token);
     }
+
+
 //    private void readAddresses() {
 //        listNote.clear();
 //        BufferedReader bufferedReader = null;

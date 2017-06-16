@@ -20,8 +20,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private CheckBox mAutoLoginCheckBox;
 
 
-
-
     /**
      * A login screen that offers login via email/password.
      */
@@ -48,16 +46,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        switch(view.getId())
-        {
-            case    R.id.login_Btn :
-            {
-                Log.d("result","click");
-                searchToDatabase(id_Edit.getText().toString(),pass_Edit.getText().toString());
+        switch (view.getId()) {
+            case R.id.login_Btn: {
+                Log.d("result", "click");
+                searchToDatabase(id_Edit.getText().toString(), pass_Edit.getText().toString());
             }
             break;
-            case    R.id.join_Btn :
-            {
+            case R.id.join_Btn: {
                 Intent intent = new Intent(LoginActivity.this, JoinActivity.class);
                 startActivity(intent);
             }
@@ -65,7 +60,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    private void searchToDatabase(String id, String pass){
+    private void searchToDatabase(String id, String pass) {
 
         class searchData extends AsyncTask<String, Void, String> {
             String id;
@@ -80,28 +75,28 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                if(s.equals("ok")) {
+                if (s.equals("ok")) {
                     ApplicationClass.ID = id;
-                    Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
-                }
-                else
-                    Toast.makeText(getApplicationContext(),"아이디 또는 비밀번호가 일치하지 않습니다.",Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(getApplicationContext(), "아이디 또는 비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
             }
+
             @Override
             protected String doInBackground(String... params) {
-                Log.d("result","back");
+                Log.d("result", "back");
                 id = (String) params[0];
                 pass = (String) params[1];
                 String[] posts = {id, pass};
                 DB db = new DB("login.php");
                 String result = db.post(posts);
-                Log.d("result",result);
+                Log.d("result", result);
                 return result;
             }
         }
-        //searchData task = new searchData(Application.this);
+        //SearchData task = new SearchData(Application.this);
         searchData task = new searchData();
         task.execute(id, pass);
     }

@@ -1,8 +1,5 @@
 package com.leastb.moonsoo.walkingeye.DTO;
 
-/**
- * Created by wisebody on 2017. 6. 7..
- */
 
 public class BlackBoxDTO {
     private String imgName;

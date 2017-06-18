@@ -34,12 +34,9 @@ public class PolygonDemoActivity extends Activity implements MapView.MapViewEven
     private static final int MENU_REMOVE_CIRCLE = Menu.FIRST + 4;
     MapPolyline polyline1;
     private MapView mMapView;
-    MapPoint start = null;
     MapPoint end = null;
     Button add;
-    int size;
     int id;
-    private MapPoint[] mPolyline2Points;
     private boolean isMapViewInitialized = false;
 
     @Override
@@ -52,30 +49,7 @@ public class PolygonDemoActivity extends Activity implements MapView.MapViewEven
         mMapView.setDaumMapApiKey("3442a54f5e352782458d10f8dab3077d");
         mMapView.setMapViewEventListener(this);
         searchCoordi(Integer.toString(id));
-//        mPolyline2Points = new MapPoint[]{
-//                MapPoint.mapPointWithWCONGCoord(475334.0, 1101210.0),
-//                MapPoint.mapPointWithWCONGCoord(474300.0,1104123.0),
-//                MapPoint.mapPointWithWCONGCoord(474300.0,1104123.0),
-//                MapPoint.mapPointWithWCONGCoord(473873.0,1105377.0),
-//                MapPoint.mapPointWithWCONGCoord(473302.0,1107097.0),
-//                MapPoint.mapPointWithWCONGCoord(473126.0,1109606.0),
-//                MapPoint.mapPointWithWCONGCoord(473063.0,1110548.0),
-//                MapPoint.mapPointWithWCONGCoord(473435.0,1111020.0),
-//                MapPoint.mapPointWithWCONGCoord(474068.0,1111714.0),
-//                MapPoint.mapPointWithWCONGCoord(475475.0,1112765.0),
-//                MapPoint.mapPointWithWCONGCoord(476938.0,1113532.0),
-//                MapPoint.mapPointWithWCONGCoord(478725.0,1114391.0),
-//                MapPoint.mapPointWithWCONGCoord(479453.0,1114785.0),
-//                MapPoint.mapPointWithWCONGCoord(480145.0,1115145.0),
-//                MapPoint.mapPointWithWCONGCoord(481280.0,1115237.0),
-//                MapPoint.mapPointWithWCONGCoord(481777.0,1115164.0),
-//                MapPoint.mapPointWithWCONGCoord(482322.0,1115923.0),
-//                MapPoint.mapPointWithWCONGCoord(482832.0,1116322.0),
-//                MapPoint.mapPointWithWCONGCoord(483384.0,1116754.0),
-//                MapPoint.mapPointWithWCONGCoord(484401.0,1117547.0),
-//                MapPoint.mapPointWithWCONGCoord(484893.0,1117930.0),
-//                MapPoint.mapPointWithWCONGCoord(485016.0,1118034.0)
-//        };
+
         add = (Button) findViewById(R.id.draw);
         add.setVisibility(View.INVISIBLE);
         add.setOnClickListener(new View.OnClickListener() {
@@ -169,7 +143,7 @@ public class PolygonDemoActivity extends Activity implements MapView.MapViewEven
                 return true;
             }
             case MENU_ADD_POLYLINE2: {
-//                addPolyline2();
+
                 return true;
             }
             case MENU_REMOVE_POLYLINES: {
@@ -177,7 +151,7 @@ public class PolygonDemoActivity extends Activity implements MapView.MapViewEven
                 return true;
             }
             case MENU_ADD_CIRCLES: {
-                addCircles();
+
                 return true;
             }
             case MENU_REMOVE_CIRCLE: {
@@ -191,80 +165,7 @@ public class PolygonDemoActivity extends Activity implements MapView.MapViewEven
         return super.onOptionsItemSelected(item);
     }
 
-    private void addCircles() {
-        MapCircle circle1 = new MapCircle(
-                MapPoint.mapPointWithGeoCoord(37.537094, 127.005470), // center
-                500, // radius
-                Color.argb(128, 255, 0, 0), // strokeColor
-                Color.argb(128, 0, 255, 0) // fillColor
-        );
-        circle1.setTag(1234);
-        mMapView.addCircle(circle1);
-        MapCircle circle2 = new MapCircle(
-                MapPoint.mapPointWithGeoCoord(37.551094, 127.019470), // center
-                1000, // radius
-                Color.argb(128, 255, 0, 0), // strokeColor
-                Color.argb(128, 255, 255, 0) // fillColor
-        );
-        circle2.setTag(5678);
-        mMapView.addCircle(circle2);
 
-        // 지도뷰의 중심좌표와 줌레벨을 Circle이 모두 나오도록 조정.
-        MapPointBounds[] mapPointBoundsArray = {circle1.getBound(), circle2.getBound()};
-        MapPointBounds mapPointBounds = new MapPointBounds(mapPointBoundsArray);
-        int padding = 50; // px
-        mMapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding));
-    }
-
-    private void addPolyline2(MapPoint start, MapPoint end, int size) {
-
-        MapPOIItem existingPOIItemStart = mMapView.findPOIItemByTag(10001);
-        if (existingPOIItemStart != null) {
-            mMapView.removePOIItem(existingPOIItemStart);
-        }
-
-        MapPOIItem existingPOIItemEnd = mMapView.findPOIItemByTag(10002);
-        if (existingPOIItemEnd != null) {
-            mMapView.removePOIItem(existingPOIItemEnd);
-        }
-
-        MapPolyline existingPolyline = mMapView.findPolylineByTag(2000);
-        if (existingPolyline != null) {
-            mMapView.removePolyline(existingPolyline);
-        }
-
-        MapPOIItem poiItemStart = new MapPOIItem();
-        poiItemStart.setItemName("Start");
-        poiItemStart.setTag(10001);
-        poiItemStart.setMapPoint(start);
-        poiItemStart.setMarkerType(MapPOIItem.MarkerType.CustomImage);
-        poiItemStart.setShowAnimationType(MapPOIItem.ShowAnimationType.SpringFromGround);
-        poiItemStart.setShowCalloutBalloonOnTouch(false);
-        poiItemStart.setCustomImageResourceId(R.drawable.custom_poi_marker_start);
-        poiItemStart.setCustomImageAnchorPointOffset(new MapPOIItem.ImageOffset(29, 2));
-        mMapView.addPOIItem(poiItemStart);
-
-        MapPOIItem poiItemEnd = new MapPOIItem();
-        poiItemEnd.setItemName("End");
-        poiItemEnd.setTag(10001);
-        poiItemEnd.setMapPoint(end);
-        poiItemEnd.setMarkerType(MapPOIItem.MarkerType.CustomImage);
-        poiItemEnd.setShowAnimationType(MapPOIItem.ShowAnimationType.SpringFromGround);
-        poiItemEnd.setShowCalloutBalloonOnTouch(false);
-        poiItemEnd.setCustomImageResourceId(R.drawable.custom_poi_marker_end);
-        poiItemEnd.setCustomImageAnchorPointOffset(new MapPOIItem.ImageOffset(29, 2));
-        mMapView.addPOIItem(poiItemEnd);
-
-        MapPolyline polyline2 = new MapPolyline(size - 3);
-        polyline2.setTag(2000);
-        polyline2.setLineColor(Color.argb(128, 0, 0, 255));
-        polyline2.addPoints(mPolyline2Points);
-        mMapView.addPolyline(polyline2);
-
-        MapPointBounds mapPointBounds = new MapPointBounds(mPolyline2Points);
-        int padding = 200; // px
-        mMapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding));
-    }
 
     private void addPolyline1() {
         MapPolyline existingPolyline = mMapView.findPolylineByTag(1000);
@@ -295,10 +196,7 @@ public class PolygonDemoActivity extends Activity implements MapView.MapViewEven
         mMapView.addPOIItem(poiItemEnd);
         polyline1.setTag(1000);
         polyline1.setLineColor(Color.argb(128, 255, 51, 0));
-//        polyline1.addPoint(MapPoint.mapPointWithGeoCoord(37.537229, 127.005515));
-//        polyline1.addPoint(MapPoint.mapPointWithGeoCoord(37.545024,127.03923));
-//        polyline1.addPoint(MapPoint.mapPointWithGeoCoord(37.527896,127.036245));
-//        polyline1.addPoint(MapPoint.mapPointWithGeoCoord(37.541889,127.095388));
+
 
         mMapView.addPolyline(polyline1);
 
